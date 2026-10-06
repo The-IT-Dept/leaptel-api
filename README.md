@@ -86,7 +86,7 @@ with connection-refused, not quietly mis-provision a customer.
 ## About this repo
 
 This is a read-only mirror. The source of truth is a private monorepo at
-`the-it-dept/core`, and every push to `main` there that touches the fake or
+`the-it-dept/underlay`, and every push to `main` there that touches the fake or
 the client syncs into this repo automatically. Commits here reference the
 upstream revision they were built from.
 

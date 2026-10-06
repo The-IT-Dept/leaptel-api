@@ -183,7 +183,7 @@ func (s *fakeServer) getService(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, svc)
 }
 
-// POST /services/{id}/modify (multipart, product_id=...)
+// POST /services/{id}/modify (multipart, plan_id=... or product_id=...)
 func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -194,12 +194,17 @@ func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid multipart body"})
 		return
 	}
+	// Leaptel takes the target as plan_id (what the backend sends since
+	// plans are keyed by Leaptel plan id) or, historically, product_id.
 	productID := r.FormValue("product_id")
+	if productID == "" && r.FormValue("plan_id") != "" {
+		productID = "plan:" + r.FormValue("plan_id")
+	}
 	if productID == "" {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "product_id is required"})
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "plan_id or product_id is required"})
 		return
 	}
-	// Mirror the wholesaler's required fields so a missing one is caught here,
+	// Mirror Leaptel's required fields so a missing one is caught here,
 	// not silently in prod.
 	if r.FormValue("order_type") == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "order_type is required"})

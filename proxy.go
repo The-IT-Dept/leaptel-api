@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// upstreamBaseURL is the real Leaptel wholesaler API. Proxied endpoints
+// upstreamBaseURL is the real Leaptel API. Proxied endpoints
 // hit this — the caller's Authorization header is forwarded as-is.
 const upstreamBaseURL = "https://api.wholesaler.leaptel.com.au/api/v1/wholesaler"
 

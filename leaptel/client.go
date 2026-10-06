@@ -16,7 +16,7 @@ import (
 
 // defaultBaseURL points at the local fake server (cmd/leaptel-api). This
 // is intentional: in production we set LEAPTEL_BASE_URL explicitly to the
-// real wholesaler URL (https://api.wholesaler.leaptel.com.au/api/v1/wholesaler).
+// real Leaptel URL (https://api.wholesaler.leaptel.com.au/api/v1/wholesaler).
 // Defaulting to the fake means a forgotten config can't accidentally fire
 // real orders — connection-refused is loud, mis-provisioning a customer is
 // silent and expensive.
@@ -30,7 +30,7 @@ type Client struct {
 }
 
 // NewClient builds a Leaptel API client. baseURL may be empty to use the
-// production wholesaler URL; pass a different value to point at a fake/dev
+// production Leaptel URL; pass a different value to point at a fake/dev
 // server (see cmd/leaptel-api).
 func NewClient(baseURL, username, password string) *Client {
 	if baseURL == "" {
@@ -600,7 +600,7 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 		form["product_id"] = p.ProductID
 	}
 	// No realm, ever: we only buy L2 here — we are our own PPP aggregator,
-	// and a wholesaler's realm is our routers' business, not Leaptel's.
+	// and an account's realm is our routers' business, not Leaptel's.
 	for k, v := range map[string]string{
 		"order_after":        p.OrderAfter,
 		"ca_date":            p.CADate,
@@ -641,8 +641,8 @@ type ModifyServiceParams struct {
 
 // ModifyService raises a modify order moving an active service to a new
 // product (speed change), optionally swapping the NTD. The response carries
-// the order to poll. order_type=plan and order_after are required by the
-// wholesaler; order_after defaults to today (apply now).
+// the order to poll. order_type=plan and order_after are required by
+// Leaptel; order_after defaults to today (apply now).
 func (c *Client) ModifyService(serviceID int, p ModifyServiceParams) (*CreateOrderResponse, json.RawMessage, error) {
 	form := map[string]string{
 		"order_type":  "plan",

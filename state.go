@@ -169,6 +169,9 @@ type fakeOrder struct {
 	// NTD_2.5). A non-empty value forces the install-appointment flow — a
 	// next-gen NTD swap or fibre connect always needs a tech onsite.
 	NTDType string
+	// NTDPort is the UNI-D port number the order asked for (FTTP); the
+	// completed service reports it back like the real API does.
+	NTDPort string
 	// COAT="yes" marks a Change Of Access Technology (FTTC/N → FTTP fibre
 	// connect) — a fibre build that also needs a tech onsite.
 	COAT          string
@@ -308,6 +311,7 @@ func (s *state) createOrder(p leaptel.CreateOrderParams) *fakeOrder {
 		LocationID: p.LocationID,
 		ProductID:  p.ProductID,
 		NTDType:    p.NTDType,
+		NTDPort:    p.NTDPort,
 		COAT:       p.COAT,
 		StartDate:  time.Now().UTC().Format("2006-01-02 15:04:05"),
 		CreatedAt:  time.Now().UTC(),
@@ -607,6 +611,9 @@ func completeService(svc *leaptel.Service, o *fakeOrder) {
 	svc.AVCID = "AVC000000" + padInt(o.ServiceID, 6)
 	svc.NTDID = "NTD" + padInt(o.ServiceID, 9)
 	svc.PortID = "1"
+	if o.NTDPort != "" {
+		svc.PortID = o.NTDPort
+	}
 	// nbn_pri / opt_pri are the product instance IDs (Leaptel's
 	// persistent handle for the provisioned service on the access
 	// network), not QoS labels. Synthesise in the same PRI000000XXXXXX

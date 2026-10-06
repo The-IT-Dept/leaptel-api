@@ -1,4 +1,4 @@
-// cmd/leaptel-api is a fake Leaptel wholesaler API for local development.
+// cmd/leaptel-api is a fake Leaptel API for local development.
 //
 // It serves the same endpoints as Leaptel's production API
 // (/api/v1/wholesaler/*) so the prism backend can talk to it unchanged —
