@@ -720,9 +720,36 @@ func (c *Client) ModifyService(serviceID int, p ModifyServiceParams) (*CreateOrd
 	return &out, raw, nil
 }
 
-// CancelService raises a cancellation order for a service.
-func (c *Client) CancelService(serviceID int) (json.RawMessage, error) {
-	return c.doMultipart("POST", fmt.Sprintf("/services/%d/cancel", serviceID), map[string]string{}, nil)
+// CancelOrder is POST /services/{id}/cancel's reply: the cancel is an order
+// of its own, polled like any other.
+type CancelOrder struct {
+	OrderID   int    `json:"order_id"`
+	Action    string `json:"order_action"`
+	OrderDate string `json:"order_date"`
+}
+
+// UnmarshalJSON reads the order id as a number or a quoted number.
+func (o *CancelOrder) UnmarshalJSON(b []byte) error {
+	var aux struct {
+		OrderID   flexID `json:"order_id"`
+		Action    string `json:"order_action"`
+		OrderDate string `json:"order_date"`
+	}
+	if err := json.Unmarshal(b, &aux); err != nil {
+		return err
+	}
+	o.OrderID, o.Action, o.OrderDate = int(aux.OrderID), aux.Action, aux.OrderDate
+	return nil
+}
+
+// CancelService raises a cancel order for a live service.
+func (c *Client) CancelService(serviceID int) (*CancelOrder, json.RawMessage, error) {
+	var out CancelOrder
+	raw, err := c.doMultipart("POST", fmt.Sprintf("/services/%d/cancel", serviceID), map[string]string{}, &out)
+	if err != nil {
+		return nil, raw, err
+	}
+	return &out, raw, nil
 }
 
 // Order matches the wholesaler_order schema from GET /orders/{id}.
