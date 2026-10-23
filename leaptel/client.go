@@ -565,6 +565,7 @@ type CreateOrderParams struct {
 	COAT             string // "yes" — Change Of Access Technology (FTTC/N → FTTP fibre connect)
 	InterimServiceID string // existing copper service being COAT'd; only with COAT=yes
 	CopperPair       string // "new" | "CPI..."
+	LVCID            string // required on layer 2 plans; Leaptel picks the C-tag when lvc_c_tag is unset
 	Username         string
 	Password         string
 }
@@ -619,6 +620,7 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 		"coat":               p.COAT,
 		"interim_service_id": p.InterimServiceID,
 		"copper_pair":        p.CopperPair,
+		"lvc_id":             p.LVCID,
 		"username":           p.Username,
 		"password":           p.Password,
 	} {
