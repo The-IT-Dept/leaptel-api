@@ -566,7 +566,8 @@ type CreateOrderParams struct {
 	InterimServiceID string // existing copper service being COAT'd; only with COAT=yes
 	CopperPair       string // "new" | "CPI..."
 	Realm            string // Leaptel wants one on layer 2 too, though nothing authenticates against it
-	LVCID            string // required on layer 2 plans; Leaptel picks the C-tag when lvc_c_tag is unset
+	LVCID            string // required on layer 2 plans: the LVC's number (LVC000000000021 is "21")
+	LVCCTag          string // "0" has Leaptel assign the next free C-tag
 	Username         string
 	Password         string
 }
@@ -656,6 +657,7 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 		"interim_service_id": p.InterimServiceID,
 		"copper_pair":        p.CopperPair,
 		"lvc_id":             p.LVCID,
+		"lvc_c_tag":          p.LVCCTag,
 		"realm":              p.Realm,
 		"username":           p.Username,
 		"password":           p.Password,
