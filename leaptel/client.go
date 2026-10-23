@@ -565,7 +565,7 @@ type CreateOrderParams struct {
 	COAT             string // "yes" — Change Of Access Technology (FTTC/N → FTTP fibre connect)
 	InterimServiceID string // existing copper service being COAT'd; only with COAT=yes
 	CopperPair       string // "new" | "CPI..."
-	Realm            string // Leaptel wants one on layer 2 too, though nothing authenticates against it
+	Realm            string // layer 3 only: a layer 2 order must carry no realm, username or password
 	Layer2           string // "yes" builds the order as layer 2: without it Leaptel builds layer 3 and drops the LVC
 	LVCID            string // required on layer 2 plans: the full id (LVC000000000021; an integer is "Invalid LVC format")
 	LVCCTag          string // "0" has Leaptel assign the next free C-tag
@@ -643,9 +643,8 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 	} else if p.ProductID != "" {
 		form["product_id"] = p.ProductID
 	}
-	// Username and password are left to Leaptel (it generates them): we buy
-	// L2 and are our own BNG, so nothing authenticates against them. The
-	// realm is ours, which Leaptel requires all the same.
+	// Our orders are layer 2 (layer_2=yes): no realm, username or password,
+	// which Leaptel refuses on them. Those are layer 3 fields.
 	for k, v := range map[string]string{
 		"order_after":        p.OrderAfter,
 		"ca_date":            p.CADate,
