@@ -27,6 +27,7 @@ type Client struct {
 	username string
 	password string
 	http     *http.Client
+	scope    scope // what the call record tags calls with (see For)
 }
 
 // NewClient builds a Leaptel API client. baseURL may be empty to use the
@@ -40,7 +41,7 @@ func NewClient(baseURL, username, password string) *Client {
 		baseURL:  baseURL,
 		username: username,
 		password: password,
-		http:     &http.Client{},
+		http:     &http.Client{Transport: &recorder{base: http.DefaultTransport, baseURL: baseURL, timeout: defaultTimeout}},
 	}
 }
 
@@ -68,7 +69,7 @@ func (c *Client) serviceQualification(locationID, avcID string) (json.RawMessage
 		}
 	}()
 
-	req, err := http.NewRequest("POST", c.baseURL+"/service-qualifications", pr)
+	req, err := c.newRequest("POST", c.baseURL+"/service-qualifications", pr)
 	if err != nil {
 		return nil, fmt.Errorf("building request: %w", err)
 	}
@@ -125,7 +126,7 @@ func (c *Client) Products(carrier string) ([]Product, error) {
 
 // ListProducts returns all available wholesale products for a carrier (typically "nbn").
 func (c *Client) ListProducts(carrier string) (json.RawMessage, error) {
-	req, err := http.NewRequest("GET", c.baseURL+"/products?carrier="+carrier, nil)
+	req, err := c.newRequest("GET", c.baseURL+"/products?carrier="+carrier, nil)
 	if err != nil {
 		return nil, fmt.Errorf("building request: %w", err)
 	}
@@ -271,7 +272,7 @@ func (c *Client) GetService(serviceID int) (*Service, error) {
 }
 
 func (c *Client) doJSON(method, path string, out any) error {
-	req, err := http.NewRequest(method, c.baseURL+path, nil)
+	req, err := c.newRequest(method, c.baseURL+path, nil)
 	if err != nil {
 		return fmt.Errorf("building request: %w", err)
 	}
@@ -300,7 +301,7 @@ func (c *Client) doJSON(method, path string, out any) error {
 // doJSONRaw is like doJSON but also returns the raw response body so callers
 // can persist the exact bytes (useful when capturing sample payloads).
 func (c *Client) doJSONRaw(method, path string, out any) (json.RawMessage, error) {
-	req, err := http.NewRequest(method, c.baseURL+path, nil)
+	req, err := c.newRequest(method, c.baseURL+path, nil)
 	if err != nil {
 		return nil, fmt.Errorf("building request: %w", err)
 	}
@@ -409,7 +410,7 @@ func (c *Client) RunAssuranceTest(serviceID, testNumber int) (*AssuranceResult, 
 	}()
 
 	path := fmt.Sprintf("/services/%d/assurance-tests", serviceID)
-	req, err := http.NewRequest("POST", c.baseURL+path, pr)
+	req, err := c.newRequest("POST", c.baseURL+path, pr)
 	if err != nil {
 		return nil, nil, fmt.Errorf("building request: %w", err)
 	}
@@ -845,7 +846,7 @@ func (c *Client) doMultipart(method, path string, fields map[string]string, out 
 		}
 	}()
 
-	req, err := http.NewRequest(method, c.baseURL+path, pr)
+	req, err := c.newRequest(method, c.baseURL+path, pr)
 	if err != nil {
 		return nil, fmt.Errorf("building request: %w", err)
 	}
@@ -879,7 +880,7 @@ func (c *Client) doJSONBody(method, path string, body, out any) (json.RawMessage
 	if err != nil {
 		return nil, fmt.Errorf("marshalling body: %w", err)
 	}
-	req, err := http.NewRequest(method, c.baseURL+path, bytes.NewReader(b))
+	req, err := c.newRequest(method, c.baseURL+path, bytes.NewReader(b))
 	if err != nil {
 		return nil, fmt.Errorf("building request: %w", err)
 	}
