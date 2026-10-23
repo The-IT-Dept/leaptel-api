@@ -74,6 +74,7 @@ func TestStopTripRules(t *testing.T) {
 		}, true, false},
 		{"garbage 2xx", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte(`<html>oops`)) }, true, true},
 		{"no order id", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte(`{"status":"ok"}`)) }, true, true},
+		{"empty quoted order id", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte(`{"order_id":""}`)) }, true, true},
 		{"timeout", func(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(300 * time.Millisecond)
 			w.Write([]byte(`{"order_id":1}`))

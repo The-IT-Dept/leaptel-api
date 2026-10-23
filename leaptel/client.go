@@ -578,6 +578,39 @@ type CreateOrderResponse struct {
 	LocationID string `json:"location_id"`
 }
 
+// UnmarshalJSON reads the ids as numbers or quoted numbers: POST /orders
+// quotes them, GET /orders/{id} doesn't.
+func (r *CreateOrderResponse) UnmarshalJSON(b []byte) error {
+	var aux struct {
+		OrderID    flexID `json:"order_id"`
+		ServiceID  flexID `json:"service_id"`
+		LocationID string `json:"location_id"`
+	}
+	if err := json.Unmarshal(b, &aux); err != nil {
+		return err
+	}
+	r.OrderID, r.ServiceID, r.LocationID = int(aux.OrderID), int(aux.ServiceID), aux.LocationID
+	return nil
+}
+
+// flexID is a Leaptel id sent as a number or a quoted number; empty or null
+// is 0.
+type flexID int
+
+func (f *flexID) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(strings.TrimSpace(string(b)), `"`)
+	if s == "" || s == "null" {
+		*f = 0
+		return nil
+	}
+	n, err := strconv.Atoi(s)
+	if err != nil {
+		return fmt.Errorf("leaptel id %s: %w", b, err)
+	}
+	*f = flexID(n)
+	return nil
+}
+
 // CreateOrder submits a new order via POST /orders (multipart).
 func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.RawMessage, error) {
 	form := map[string]string{

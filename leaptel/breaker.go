@@ -117,7 +117,7 @@ func tripReason(method, path string, status int, body []byte, err error) (reason
 		return fmt.Sprintf("%s %s: HTTP %d with a reply we can't read", method, path, status), true
 	case status >= 200 && status < 300 && method == http.MethodPost && strings.TrimRight(path, "/") == "/orders":
 		var o struct {
-			OrderID int `json:"order_id"`
+			OrderID flexID `json:"order_id"`
 		}
 		if json.Unmarshal(body, &o) != nil || o.OrderID <= 0 {
 			return fmt.Sprintf("%s %s: accepted with no order id", method, path), true
