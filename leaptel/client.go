@@ -565,6 +565,7 @@ type CreateOrderParams struct {
 	COAT             string // "yes" — Change Of Access Technology (FTTC/N → FTTP fibre connect)
 	InterimServiceID string // existing copper service being COAT'd; only with COAT=yes
 	CopperPair       string // "new" | "CPI..."
+	Realm            string // Leaptel wants one on layer 2 too, though nothing authenticates against it
 	LVCID            string // required on layer 2 plans; Leaptel picks the C-tag when lvc_c_tag is unset
 	Username         string
 	Password         string
@@ -606,8 +607,9 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 	} else if p.ProductID != "" {
 		form["product_id"] = p.ProductID
 	}
-	// No realm, ever: we only buy L2 here — we are our own PPP aggregator,
-	// and an account's realm is our routers' business, not Leaptel's.
+	// Username and password are left to Leaptel (it generates them): we buy
+	// L2 and are our own BNG, so nothing authenticates against them. The
+	// realm is ours, which Leaptel requires all the same.
 	for k, v := range map[string]string{
 		"order_after":        p.OrderAfter,
 		"ca_date":            p.CADate,
@@ -621,6 +623,7 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 		"interim_service_id": p.InterimServiceID,
 		"copper_pair":        p.CopperPair,
 		"lvc_id":             p.LVCID,
+		"realm":              p.Realm,
 		"username":           p.Username,
 		"password":           p.Password,
 	} {
