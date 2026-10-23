@@ -166,7 +166,8 @@ type Customer struct {
 	City        string `json:"city"`
 	State       string `json:"state"`
 	Postcode    string `json:"postcode"`
-	Active      string `json:"active"` // "yes"/"no"
+	Birthdate   string `json:"birthdate"` // YYYY-MM-DD
+	Active      string `json:"active"`    // "yes"/"no"
 	BillingDay  string `json:"billing_day"`
 }
 
@@ -207,6 +208,10 @@ type Service struct {
 	PPPoEUsername    string `json:"ppoe_username"`
 	PPPoEPassword    string `json:"ppoe_password"`
 	ServiceGroup     string `json:"type_service_group"`
+	TypeDescription  string `json:"type_description"` // "NBN", "SIP Trunk", …
+	PlanID           int    `json:"plan_id"`          // the plan id the products API calls plan_id
+	NTDType          string `json:"ntd_type"`
+	AccessType       string `json:"access_type"` // nbn access code: NFAS/NHAS/NCAS/NWAS
 	ProductID        string `json:"product_id"`
 	POI              struct {
 		POIIdentifier string `json:"poi_identifier"`
