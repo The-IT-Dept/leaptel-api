@@ -634,8 +634,8 @@ func completeService(svc *leaptel.Service, o *fakeOrder) {
 	svc.POI.CSAName = "Sydney CBD"
 	svc.POI.CSAPremises = 5000
 	svc.Layer2Details.LVCID = "LVC0001"
-	svc.Layer2Details.LVCName = "warp-lvc-syd-01"
-	svc.Layer2Details.LVCDescription = "warp Sydney LVC 01"
+	svc.Layer2Details.LVCName = "underlay-lvc-syd-01"
+	svc.Layer2Details.LVCDescription = "underlay Sydney LVC 01"
 	svc.Layer2Details.LVCCTag = "100"
 	svc.FinishDate = o.FinishDate
 }
