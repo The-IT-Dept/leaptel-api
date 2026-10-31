@@ -109,6 +109,9 @@ type Product struct {
 	MonthlyCost string   `json:"monthly_cost"` // dollars, e.g. "36.14"
 	HandoffType string   `json:"handoff_type"`
 	AccessType  []string `json:"access_type"`
+	// ESLA is every eSLA level the plan offers, at its cost on this plan
+	// (Leaptel prices an eSLA per plan; Fixed Wireless offers standard only).
+	ESLA []ProductESLA `json:"esla"`
 }
 
 // Products returns the typed wholesale product list for a carrier.
@@ -230,6 +233,11 @@ type Service struct {
 	} `json:"layer_2_details"`
 	StartDate  string `json:"start_date"`
 	FinishDate string `json:"finish_date"`
+	// NbnESLA is the eSLA nbn has on the line, as Leaptel's live API names it
+	// (a display name: "Standard", "Enhanced - 4 (24/7)"). The OpenAPI spec
+	// calls it esla, with an id. Read both through ESLACode.
+	NbnESLA string `json:"nbn_esla"`
+	ESLA    string `json:"esla,omitempty"`
 }
 
 // CustomerServiceRef is the lean list entry from GET /customers/{id}/services.
@@ -572,6 +580,9 @@ type CreateOrderParams struct {
 	VLANTagging      string // "yes" | "no": tagged frames on the UNI-D
 	Username         string
 	Password         string
+	// ESLA is the eSLA id to connect with (enhanced-4-24-7, …). Empty or
+	// standard sends none.
+	ESLA string
 }
 
 // CreateOrderResponse is the body of POST /orders on success.
@@ -669,6 +680,9 @@ func (c *Client) CreateOrder(p CreateOrderParams) (*CreateOrderResponse, json.Ra
 			form[k] = v
 		}
 	}
+	if p.ESLA != "" && p.ESLA != ESLAStandard {
+		form["esla"] = p.ESLA
+	}
 	var out CreateOrderResponse
 	raw, err := c.doMultipart("POST", "/orders", form, &out)
 	if err != nil {
@@ -763,6 +777,7 @@ type Order struct {
 	FinishDate   string          `json:"finish_date"`
 	ProductID    string          `json:"product_id"`
 	NBNCallbacks json.RawMessage `json:"nbn_callbacks"`
+	NbnESLA      string          `json:"nbn_esla"` // the service's eSLA as nbn has it, a display name
 }
 
 // GetOrder fetches an order's current status.

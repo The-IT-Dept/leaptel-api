@@ -114,6 +114,12 @@ func (snap *stateSnapshot) applyTo(s *state) {
 	if snap.Services != nil {
 		s.services = snap.Services
 	}
+	// A state file from before eSLAs: every service is on Standard.
+	for _, svc := range s.services {
+		if svc.NbnESLA == "" {
+			svc.NbnESLA = eslaDisplayName(eslaStandard)
+		}
+	}
 	if snap.Appointments != nil {
 		s.appointments = snap.Appointments
 	}
@@ -179,8 +185,12 @@ type fakeOrder struct {
 	FinishDate    string
 	AppointmentID string
 	// Action distinguishes connects from service changes: "provision"
-	// (default), "modify" (speed change), "cancel".
-	Action    string
+	// (default), "modify" (speed change), "esla" (service level change),
+	// "cancel".
+	Action string
+	// ESLA is the eSLA id a connect asked for, or the one an esla modify
+	// sets; the service shows its display name once the order completes.
+	ESLA      string
 	CreatedAt time.Time
 	// AppointmentAttachedAt drives the staged post-booking progression
 	// (appointment_scheduled → technician_onsite → activating → completed).
@@ -313,6 +323,7 @@ func (s *state) createOrder(p leaptel.CreateOrderParams) *fakeOrder {
 		NTDType:    p.NTDType,
 		NTDPort:    p.NTDPort,
 		COAT:       p.COAT,
+		ESLA:       p.ESLA,
 		StartDate:  time.Now().UTC().Format("2006-01-02 15:04:05"),
 		CreatedAt:  time.Now().UTC(),
 	}
@@ -334,6 +345,7 @@ func (s *state) createOrder(p leaptel.CreateOrderParams) *fakeOrder {
 		ServiceGroup:     "data",
 		PPPoEUsername:    username,
 		StartDate:        o.StartDate,
+		NbnESLA:          eslaDisplayName(eslaStandard),
 	}
 	s.save()
 	return o
@@ -365,6 +377,96 @@ func (s *state) createModifyOrder(serviceID int, productID, replacementNTD strin
 	s.orders[o.OrderID] = o
 	s.save()
 	return o, true
+}
+
+// How long a plain modify (speed or service level) sits accepted, and when
+// it completes, measured from the order.
+const (
+	modifyAcceptedFor = 30 * time.Second
+	modifyDoneAfter   = 90 * time.Second
+)
+
+// The nbn callback reasons a plain modify reports at accepted, in progress
+// and completed: a speed change's, and a service level change's.
+var (
+	modifyReasons = [3]string{"NBN has accepted the speed change", "NBN is moving the AVC to the new speed tier",
+		"Speed change complete; service is on the new tier"}
+	eslaReasons = [3]string{"NBN has accepted the service level change", "NBN is applying the new service level",
+		"Service level change complete"}
+)
+
+// callback is a one-entry nbn_callbacks array.
+func callback(note, status, reason string) json.RawMessage {
+	b, _ := json.Marshal([]map[string]string{{"event_note": note, "status": status, "reason": reason}})
+	return b
+}
+
+// errESLARefused is why the fake turns a service level change away: the
+// service isn't active, or another change on it hasn't finished.
+type errESLARefused string
+
+func (e errESLARefused) Error() string { return string(e) }
+
+// modifyInFlight reports whether a plain modify (speed or service level) on
+// the service is still running. Connects, cancels and NTD swaps don't count.
+func (s *state) modifyInFlight(serviceID int) bool {
+	for _, o := range s.orders {
+		if o.ServiceID != serviceID || o.NTDType != "" || (o.Action != "modify" && o.Action != "esla") {
+			continue
+		}
+		if o.FinishDate == "" && time.Since(o.CreatedAt) < modifyDoneAfter {
+			return true
+		}
+	}
+	return false
+}
+
+// createESLAOrder raises a service level change against an existing service:
+// it progresses like a plain speed change and, on completion, sets the
+// service's nbn_esla. Returns false when the service doesn't exist, and an
+// errESLARefused when the service isn't active or a change is in flight.
+func (s *state) createESLAOrder(serviceID int, level string) (*fakeOrder, bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	svc, ok := s.services[serviceID]
+	if !ok {
+		return nil, false, nil
+	}
+	if svc.State != "active" {
+		return nil, true, errESLARefused("service is not active")
+	}
+	if s.modifyInFlight(serviceID) {
+		return nil, true, errESLARefused("service has an order in progress")
+	}
+	s.nextOrderID++
+	o := &fakeOrder{
+		OrderID:    s.nextOrderID,
+		ServiceID:  serviceID,
+		CustomerID: svc.CustomerID,
+		LocationID: svc.Identifier,
+		ProductID:  svc.ProductID,
+		Action:     "esla",
+		ESLA:       level,
+		StartDate:  time.Now().UTC().Format("2006-01-02 15:04:05"),
+		CreatedAt:  time.Now().UTC(),
+	}
+	s.orders[o.OrderID] = o
+	s.save()
+	return o, true, nil
+}
+
+// setESLA sets a service's nbn_esla directly (dev-only): a change made in
+// Leaptel's portal, or an eSLA a plan modify dropped.
+func (s *state) setESLA(serviceID int, level string) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	svc, ok := s.services[serviceID]
+	if !ok {
+		return false
+	}
+	svc.NbnESLA = eslaDisplayName(level)
+	s.save()
+	return true
 }
 
 // cancelService marks the backing service cancelled. The real API raises
@@ -455,31 +557,47 @@ func (s *state) pollOrder(orderID int) (*leaptel.Order, bool) {
 		ProductID:  o.ProductID,
 		StartDate:  o.StartDate,
 		Action:     action,
+		NbnESLA:    eslaDisplayName(eslaStandard),
 	}
+	// The order reads carry the service's eSLA as nbn has it now (live).
+	defer func() {
+		if svc, ok := s.services[o.ServiceID]; ok && svc.NbnESLA != "" {
+			out.NbnESLA = svc.NbnESLA
+		}
+	}()
 
-	// Plain speed changes never need appointments — quick staged
-	// progression, then the backing service flips to the new product. An NTD
-	// swap (replacement_ntd set → o.NTDType) falls through to the
-	// appointment-capable path below, like a connect.
-	if action == "modify" && o.NTDType == "" {
+	// Plain speed changes (and service level changes) never need
+	// appointments — quick staged progression, then the backing service flips
+	// to the new product (or level). An NTD swap (replacement_ntd set →
+	// o.NTDType) falls through to the appointment-capable path below, like a
+	// connect.
+	if (action == "modify" || action == "esla") && o.NTDType == "" {
 		elapsed := time.Since(o.CreatedAt)
+		reasons := modifyReasons
+		if action == "esla" {
+			reasons = eslaReasons
+		}
 		switch {
-		case elapsed < 30*time.Second:
+		case elapsed < modifyAcceptedFor:
 			out.Status = "in_progress"
 			out.State = "accepted"
-			out.NBNCallbacks = json.RawMessage(`[{"event_note":"MODIFY_ACCEPTED","status":"accepted","reason":"NBN has accepted the speed change"}]`)
-		case elapsed < 90*time.Second:
+			out.NBNCallbacks = callback("MODIFY_ACCEPTED", "accepted", reasons[0])
+		case elapsed < modifyDoneAfter:
 			out.Status = "in_progress"
 			out.State = "provisioning"
-			out.NBNCallbacks = json.RawMessage(`[{"event_note":"MODIFY_IN_PROGRESS","status":"in_progress","reason":"NBN is moving the AVC to the new speed tier"}]`)
+			out.NBNCallbacks = callback("MODIFY_IN_PROGRESS", "in_progress", reasons[1])
 		default:
 			o.FinishDate = time.Now().UTC().Format("2006-01-02 15:04:05")
 			out.Status = "completed"
 			out.State = "completed"
 			out.FinishDate = o.FinishDate
-			out.NBNCallbacks = json.RawMessage(`[{"event_note":"COMPLETED","status":"completed","reason":"Speed change complete; service is on the new tier"}]`)
+			out.NBNCallbacks = callback("COMPLETED", "completed", reasons[2])
 			if svc, ok := s.services[o.ServiceID]; ok {
-				svc.ProductID = o.ProductID
+				if action == "esla" {
+					svc.NbnESLA = eslaDisplayName(o.ESLA) // a plan modify keeps the service's eSLA
+				} else {
+					svc.ProductID = o.ProductID
+				}
 			}
 		}
 		s.save()
@@ -638,6 +756,37 @@ func completeService(svc *leaptel.Service, o *fakeOrder) {
 	svc.Layer2Details.LVCDescription = "underlay Sydney LVC 01"
 	svc.Layer2Details.LVCCTag = "100"
 	svc.FinishDate = o.FinishDate
+	svc.NbnESLA = eslaDisplayName(eslaStandard)
+	if o.ESLA != "" {
+		svc.NbnESLA = eslaDisplayName(o.ESLA)
+	}
+}
+
+// eSLA ids the fake accepts, and the display names Leaptel's live API reports
+// them by on services and orders (nbn_esla).
+const eslaStandard = "standard"
+
+var eslaNames = map[string]string{
+	"standard":         "Standard",
+	"enhanced-12":      "Enhanced - 12",
+	"enhanced-12-24-7": "Enhanced - 12 (24/7)",
+	"enhanced-8":       "Enhanced - 8",
+	"enhanced-8-24-7":  "Enhanced - 8 (24/7)",
+	"enhanced-6":       "Enhanced - 6",
+	"enhanced-6-24-7":  "Enhanced - 6 (24/7)",
+	"enhanced-4":       "Enhanced - 4",
+	"enhanced-4-24-7":  "Enhanced - 4 (24/7)",
+}
+
+// validESLA reports whether id is an eSLA id Leaptel knows.
+func validESLA(id string) bool { _, ok := eslaNames[id]; return ok }
+
+// eslaDisplayName is an eSLA id's display name ("Standard" for "").
+func eslaDisplayName(id string) string {
+	if n, ok := eslaNames[id]; ok {
+		return n
+	}
+	return eslaNames[eslaStandard]
 }
 
 func (s *state) getService(serviceID int) (*leaptel.Service, bool) {

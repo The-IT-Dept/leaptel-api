@@ -93,6 +93,10 @@ func (s *fakeServer) createOrder(w http.ResponseWriter, r *http.Request) {
 	}
 	customerID, _ := strconv.Atoi(r.FormValue("customer_id"))
 	planID, _ := strconv.Atoi(r.FormValue("plan_id"))
+	if esla := r.FormValue("esla"); esla != "" && !validESLA(esla) {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid esla"})
+		return
+	}
 	p := leaptel.CreateOrderParams{
 		CustomerID:       customerID,
 		Carrier:          r.FormValue("carrier"),
@@ -114,6 +118,7 @@ func (s *fakeServer) createOrder(w http.ResponseWriter, r *http.Request) {
 		NTDType:          r.FormValue("ntd_type"),
 		COAT:             r.FormValue("coat"),
 		AVCID:            r.FormValue("avc_id"),
+		ESLA:             r.FormValue("esla"),
 	}
 	o := s.state.createOrder(p)
 	slog.Info("fake created order", "order_id", o.OrderID, "service_id", o.ServiceID, "customer_id", o.CustomerID, "location_id", o.LocationID)
@@ -183,7 +188,9 @@ func (s *fakeServer) getService(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, svc)
 }
 
-// POST /services/{id}/modify (multipart, plan_id=... or product_id=...)
+// POST /services/{id}/modify (multipart). order_type=plan is a speed change
+// (plan_id=... or product_id=...); order_type=esla a service level change
+// (esla=<id>, no plan).
 func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
@@ -192,6 +199,18 @@ func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := r.ParseMultipartForm(1 << 20); err != nil {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid multipart body"})
+		return
+	}
+	switch r.FormValue("order_type") {
+	case "plan":
+	case "esla":
+		s.modifyESLA(w, r, id)
+		return
+	case "":
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "order_type is required"})
+		return
+	default:
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid order_type"})
 		return
 	}
 	// Leaptel takes the target as plan_id (what the backend sends since
@@ -206,10 +225,6 @@ func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 	}
 	// Mirror Leaptel's required fields so a missing one is caught here,
 	// not silently in prod.
-	if r.FormValue("order_type") == "" {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "order_type is required"})
-		return
-	}
 	if r.FormValue("order_after") == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "order_after is required"})
 		return
@@ -225,6 +240,61 @@ func (s *fakeServer) modifyService(w http.ResponseWriter, r *http.Request) {
 		ServiceID:  o.ServiceID,
 		LocationID: o.LocationID,
 	})
+}
+
+// modifyESLA is POST /services/{id}/modify with order_type=esla: the level
+// (enum-checked) and order_after are required; a plan is not.
+func (s *fakeServer) modifyESLA(w http.ResponseWriter, r *http.Request, id int) {
+	esla := r.FormValue("esla")
+	if esla == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "esla is required"})
+		return
+	}
+	if !validESLA(esla) {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid esla"})
+		return
+	}
+	if r.FormValue("order_after") == "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "order_after is required"})
+		return
+	}
+	o, ok, err := s.state.createESLAOrder(id, esla)
+	if !ok {
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "service not found"})
+		return
+	}
+	if err != nil {
+		writeJSON(w, http.StatusUnprocessableEntity, map[string]string{"error": err.Error()})
+		return
+	}
+	slog.Info("fake created esla order", "order_id", o.OrderID, "service_id", id, "esla", esla)
+	writeJSON(w, http.StatusOK, leaptel.CreateOrderResponse{
+		OrderID:    o.OrderID,
+		ServiceID:  o.ServiceID,
+		LocationID: o.LocationID,
+	})
+}
+
+// POST /services/{id}/set-esla (form esla=<id>) — dev-only (not a real
+// Leaptel endpoint): sets the service's nbn_esla directly, to simulate a
+// change made in Leaptel's portal or an eSLA a plan modify dropped.
+func (s *fakeServer) setServiceESLA(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid service id"})
+		return
+	}
+	esla := r.FormValue("esla")
+	if !validESLA(esla) {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid esla"})
+		return
+	}
+	if !s.state.setESLA(id, esla) {
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "service not found"})
+		return
+	}
+	slog.Info("fake set service esla (simulated)", "service_id", id, "esla", esla)
+	writeJSON(w, http.StatusOK, map[string]string{"nbn_esla": eslaDisplayName(esla)})
 }
 
 // POST /services/{id}/cancel (multipart, no fields)

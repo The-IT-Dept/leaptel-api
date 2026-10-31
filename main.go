@@ -14,7 +14,9 @@
 //	FAKED (in-memory, no real provisioning):
 //	  - POST   /customers, GET /customers, GET /customers/{id}/services
 //	  - POST   /orders, GET /orders/{id}, PATCH /orders/{id}/appointment
-//	  - GET    /services/{id}
+//	  - GET    /services/{id}, POST /services/{id}/modify (order_type plan or esla)
+//	  - POST   /services/{id}/cancel
+//	  - POST   /services/{id}/cease, /services/{id}/set-esla (dev-only)
 //	  - GET    /appointments/time-slots, POST /appointments
 //	  - POST   /services/{id}/assurance-tests
 //	  - GET    /services/{id}/assurance-tests/{testId}
@@ -53,38 +55,46 @@ func main() {
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"status":"ok","service":"fake-leaptel"}`))
 	})
+	r.Mount("/api/v1/wholesaler", srv.routes())
+	runServer(r, *addr)
+}
 
-	r.Route("/api/v1/wholesaler", func(r chi.Router) {
-		// Proxied endpoints — forwarded to the real Leaptel.
-		r.Get("/products", proxyUpstream)
-		r.Post("/service-qualifications", proxyUpstream)
-		r.Get("/service-assurance-tests", proxyUpstream)
+// routes is the fake's API, mounted at /api/v1/wholesaler.
+func (srv *fakeServer) routes() chi.Router {
+	r := chi.NewRouter()
+	// Proxied endpoints — forwarded to the real Leaptel.
+	r.Get("/products", proxyUpstream)
+	r.Post("/service-qualifications", proxyUpstream)
+	r.Get("/service-assurance-tests", proxyUpstream)
 
-		// Faked stateful endpoints — require any non-empty Authorization
-		// header but don't validate it (the prism backend is the only
-		// caller in dev).
-		r.Post("/customers", requireAuth(srv.createCustomer))
-		r.Get("/customers", requireAuth(srv.listCustomers))
-		r.Get("/customers/{id}/services", requireAuth(srv.listCustomerServices))
+	// Faked stateful endpoints — require any non-empty Authorization
+	// header but don't validate it (the prism backend is the only
+	// caller in dev).
+	r.Post("/customers", requireAuth(srv.createCustomer))
+	r.Get("/customers", requireAuth(srv.listCustomers))
+	r.Get("/customers/{id}/services", requireAuth(srv.listCustomerServices))
 
-		r.Post("/orders", requireAuth(srv.createOrder))
-		r.Get("/orders/{id}", requireAuth(srv.getOrder))
-		r.Patch("/orders/{id}/appointment", requireAuth(srv.attachAppointment))
+	r.Post("/orders", requireAuth(srv.createOrder))
+	r.Get("/orders/{id}", requireAuth(srv.getOrder))
+	r.Patch("/orders/{id}/appointment", requireAuth(srv.attachAppointment))
 
-		r.Get("/services/{id}", requireAuth(srv.getService))
-		r.Post("/services/{id}/modify", requireAuth(srv.modifyService))
-		r.Post("/services/{id}/cancel", requireAuth(srv.cancelService))
-		r.Post("/services/{id}/cease", requireAuth(srv.ceaseService)) // dev-only: simulate carrier churn
-		r.Post("/services/{id}/assurance-tests", requireAuth(srv.startAssuranceTest))
-		r.Get("/services/{id}/assurance-tests/{testId}", requireAuth(srv.getAssuranceTest))
-		r.Get("/services/{id}/assurance-tests-history", requireAuth(srv.listAssuranceHistory))
+	r.Get("/services/{id}", requireAuth(srv.getService))
+	r.Post("/services/{id}/modify", requireAuth(srv.modifyService))
+	r.Post("/services/{id}/cancel", requireAuth(srv.cancelService))
+	r.Post("/services/{id}/cease", requireAuth(srv.ceaseService))      // dev-only: simulate carrier churn
+	r.Post("/services/{id}/set-esla", requireAuth(srv.setServiceESLA)) // dev-only: simulate a portal eSLA change
+	r.Post("/services/{id}/assurance-tests", requireAuth(srv.startAssuranceTest))
+	r.Get("/services/{id}/assurance-tests/{testId}", requireAuth(srv.getAssuranceTest))
+	r.Get("/services/{id}/assurance-tests-history", requireAuth(srv.listAssuranceHistory))
 
-		r.Get("/appointments/time-slots", requireAuth(srv.listTimeslots))
-		r.Post("/appointments", requireAuth(srv.createAppointment))
-	})
+	r.Get("/appointments/time-slots", requireAuth(srv.listTimeslots))
+	r.Post("/appointments", requireAuth(srv.createAppointment))
+	return r
+}
 
+func runServer(r http.Handler, addr string) {
 	httpSrv := &http.Server{
-		Addr:         *addr,
+		Addr:         addr,
 		Handler:      r,
 		ReadTimeout:  15 * time.Second,
 		WriteTimeout: 30 * time.Second,
@@ -96,8 +106,8 @@ func main() {
 
 	go func() {
 		slog.Info("fake leaptel api listening",
-			"addr", *addr,
-			"base_url", "http://"+displayHost(*addr)+"/api/v1/wholesaler",
+			"addr", addr,
+			"base_url", "http://"+displayHost(addr)+"/api/v1/wholesaler",
 			"hint", "set LEAPTEL_BASE_URL to the base_url above")
 		if err := httpSrv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			slog.Error("server error", "err", err)
