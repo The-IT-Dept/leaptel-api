@@ -384,7 +384,7 @@ type AssuranceResult struct {
 // The API returns a JSON object keyed by test_number (e.g. {"1":{...},"8":{...}}),
 // which we flatten into a slice with TestNumber promoted.
 func (c *Client) ListAssuranceTests(carrier, accessTech string) ([]NumberedAssuranceTestType, json.RawMessage, error) {
-	path := fmt.Sprintf("/service-assurance-tests?carrier=%s&access_technology=%s", carrier, accessTech)
+	path := "/service-assurance-tests?" + url.Values{"carrier": {carrier}, "access_technology": {accessTech}}.Encode()
 	raw, err := c.doJSONRaw("GET", path, nil)
 	if err != nil {
 		return nil, raw, err
