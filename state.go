@@ -37,6 +37,7 @@ type state struct {
 	assuranceRuns map[int]*fakeAssuranceRun
 	outages       map[int]json.RawMessage // records added in dev (the fixtures are in outageFixtures)
 	outageLinks   map[int][]int           // service id -> outage ids attached in dev
+	scenarios     map[int]string          // service id -> assurance scenario set in dev (none: green)
 }
 
 func newState() *state {
@@ -53,6 +54,7 @@ func newState() *state {
 		assuranceRuns:     map[int]*fakeAssuranceRun{},
 		outages:           map[int]json.RawMessage{},
 		outageLinks:       map[int][]int{},
+		scenarios:         map[int]string{},
 	}
 }
 
@@ -103,6 +105,7 @@ type stateSnapshot struct {
 	AssuranceRuns     map[int]*fakeAssuranceRun `json:"assurance_runs"`
 	Outages           map[int]json.RawMessage   `json:"outages,omitempty"`
 	OutageLinks       map[int][]int             `json:"outage_links,omitempty"`
+	Scenarios         map[int]string            `json:"assurance_scenarios,omitempty"`
 }
 
 // applyTo copies snapshot fields into s. Missing maps become empty.
@@ -139,6 +142,9 @@ func (snap *stateSnapshot) applyTo(s *state) {
 	if snap.OutageLinks != nil {
 		s.outageLinks = snap.OutageLinks
 	}
+	if snap.Scenarios != nil {
+		s.scenarios = snap.Scenarios
+	}
 }
 
 // save writes the current state to disk via atomic rename. Caller MUST
@@ -161,6 +167,7 @@ func (s *state) save() {
 		AssuranceRuns:     s.assuranceRuns,
 		Outages:           s.outages,
 		OutageLinks:       s.outageLinks,
+		Scenarios:         s.scenarios,
 	}
 	b, err := json.MarshalIndent(snap, "", "  ")
 	if err != nil {
@@ -848,7 +855,7 @@ func (s *state) createAssuranceRun(serviceID, testNumber int, behaviour string) 
 	s.nextTestID++
 	now := time.Now().UTC().Format("2006-01-02 15:04:05")
 
-	resp := fixtureFor(testNumber)
+	resp := fixtureFor(s.scenarios[serviceID], testNumber)
 	if resp == nil {
 		resp = syntheticAssuranceResponse(testNumber)
 	}
@@ -873,6 +880,29 @@ func (s *state) createAssuranceRun(serviceID, testNumber int, behaviour string) 
 	s.assuranceRuns[run.TestID] = run
 	s.save()
 	return run
+}
+
+// setScenario sets the service's assurance scenario (dev only): its runs
+// from now on answer as the scenario's fixtures do.
+func (s *state) setScenario(serviceID int, name string) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if name == scenarioGreen {
+		delete(s.scenarios, serviceID)
+	} else {
+		s.scenarios[serviceID] = name
+	}
+	s.save()
+}
+
+// scenario is the service's assurance scenario: green unless set.
+func (s *state) scenario(serviceID int) string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if name, ok := s.scenarios[serviceID]; ok {
+		return name
+	}
+	return scenarioGreen
 }
 
 func (s *state) getAssuranceRun(testID int) (*fakeAssuranceRun, bool) {

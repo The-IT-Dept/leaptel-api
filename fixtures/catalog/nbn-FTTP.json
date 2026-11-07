@@ -1,0 +1,42 @@
+{
+  "1": {
+    "abbreviation": "SH",
+    "behaviour": "sync",
+    "description": "Service Health Test",
+    "service_impacting": 0,
+    "test_code": "Service Health",
+    "test_name": "Service Health"
+  },
+  "15": {
+    "abbreviation": "NTDS",
+    "behaviour": "sync",
+    "description": "Confirms the NTD's current administrative \u0026 operational state.",
+    "service_impacting": 0,
+    "test_code": "NTD Status",
+    "test_name": "NTD Status"
+  },
+  "16": {
+    "abbreviation": "PR",
+    "behaviour": "sync",
+    "description": "Forces a lock/unlock of the DSL port. Will indentify modem connected to the right port (dataflow issues).",
+    "service_impacting": 1,
+    "test_code": "Port Reset",
+    "test_name": "Port Reset"
+  },
+  "18": {
+    "abbreviation": "IDS",
+    "behaviour": "sync",
+    "description": "This retrieves the current operational status of the UNI-D associated with a specific AVC.\u003cbr\u003eNBN advice this operation should take between 10 and 20 seconds.",
+    "service_impacting": 0,
+    "test_code": "UNI-D Status",
+    "test_name": "UNI-D Status"
+  },
+  "8": {
+    "abbreviation": "LT",
+    "behaviour": "sync",
+    "description": "FTTN/FTTB: Ensures Layer 2 connectivity test of NBN Co Network for given AVC ID terminated on the DLSAM port.\u003cbr\u003eFTTC: Checks the bidirectional connectivity on the NCD UNI-D DSL service on the NBN Co Network.\u003cbr\u003eFTTP: Checks the bidirectional connectivity of Fibre on the NCD UNI-D service on the NBN Co Network.",
+    "service_impacting": 1,
+    "test_code": "Loopback Test",
+    "test_name": "Loopback Test"
+  }
+}

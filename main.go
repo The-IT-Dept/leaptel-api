@@ -9,7 +9,8 @@
 //	PROXIED (forwarded upstream with the caller's own Basic Auth):
 //	  - GET  /products
 //	  - POST /service-qualifications
-//	  - GET  /service-assurance-tests
+//	  - GET  /service-assurance-tests, only with -proxy-catalog or for a
+//	         technology without an embedded catalogue (catalog.go)
 //
 //	FAKED (in-memory, no real provisioning):
 //	  - POST   /customers, GET /customers, GET /customers/{id}/services
@@ -19,6 +20,8 @@
 //	  - POST   /services/{id}/cease, /services/{id}/set-esla (dev-only)
 //	  - GET    /appointments/time-slots, POST /appointments
 //	  - POST   /services/{id}/assurance-tests
+//	  - POST   /services/{id}/set-assurance-scenario (dev-only: answer the
+//	           service's tests red, down or refused; see fixtures.go)
 //	  - GET    /services/{id}/assurance-tests/{testId}
 //	  - GET    /services/{id}/assurance-tests-history
 //	  - GET    /outages, /outages/{id}, /services/{id}/outages (from the
@@ -48,12 +51,14 @@ import (
 func main() {
 	addr := flag.String("addr", ":9091", "listen address (e.g. :9091 or 127.0.0.1:9091)")
 	stateFile := flag.String("state-file", "./leaptel-api.state.json", "path to persist fake state to (empty to disable)")
+	proxyCatalog := flag.Bool("proxy-catalog", false, "ask the real upstream for the assurance test catalogue instead of serving the embedded one")
 	flag.Parse()
 
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
 	slog.SetDefault(logger)
 
 	srv := newFakeServer(*stateFile)
+	srv.proxyCatalog = *proxyCatalog
 
 	r := chi.NewRouter()
 	r.Use(requestLogger)
@@ -68,10 +73,11 @@ func main() {
 // routes is the fake's API, mounted at /api/v1/wholesaler.
 func (srv *fakeServer) routes() chi.Router {
 	r := chi.NewRouter()
-	// Proxied endpoints — forwarded to the real Leaptel.
+	// Proxied endpoints — forwarded to the real Leaptel (the catalogue only
+	// on request).
 	r.Get("/products", proxyUpstream)
 	r.Post("/service-qualifications", proxyUpstream)
-	r.Get("/service-assurance-tests", proxyUpstream)
+	r.Get("/service-assurance-tests", assuranceCatalog(srv.proxyCatalog))
 
 	// Faked stateful endpoints — require any non-empty Authorization
 	// header but don't validate it (the prism backend is the only
@@ -90,6 +96,7 @@ func (srv *fakeServer) routes() chi.Router {
 	r.Post("/services/{id}/cease", requireAuth(srv.ceaseService))      // dev-only: simulate carrier churn
 	r.Post("/services/{id}/set-esla", requireAuth(srv.setServiceESLA)) // dev-only: simulate a portal eSLA change
 	r.Post("/services/{id}/assurance-tests", requireAuth(srv.startAssuranceTest))
+	r.Post("/services/{id}/set-assurance-scenario", requireAuth(srv.setAssuranceScenario)) // dev-only
 	r.Get("/services/{id}/assurance-tests/{testId}", requireAuth(srv.getAssuranceTest))
 	r.Get("/services/{id}/assurance-tests-history", requireAuth(srv.listAssuranceHistory))
 

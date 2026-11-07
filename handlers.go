@@ -13,6 +13,9 @@ import (
 
 type fakeServer struct {
 	state *state
+	// proxyCatalog asks the real upstream for the assurance catalogue
+	// rather than serving the embedded one (-proxy-catalog).
+	proxyCatalog bool
 }
 
 func newFakeServer(stateFile string) *fakeServer {
@@ -455,16 +458,42 @@ func (s *fakeServer) startAssuranceTest(w http.ResponseWriter, r *http.Request) 
 		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "test_number is required"})
 		return
 	}
+	if s.state.scenario(serviceID) == scenarioRefused {
+		slog.Info("fake refused assurance test", "service_id", serviceID, "test_number", testNumber)
+		writeJSON(w, http.StatusUnprocessableEntity, refusalBody)
+		return
+	}
 	// behaviour is recorded for fidelity with Leaptel's catalog, but every
 	// run completes via polling after a few seconds (see createAssuranceRun)
 	// so the watcher and live-update paths get exercised in dev.
 	behaviour := "async"
-	if _, hasFixture := assuranceFixtures[testNumber]; hasFixture {
+	if hasFixture(testNumber) {
 		behaviour = "sync"
 	}
 	run := s.state.createAssuranceRun(serviceID, testNumber, behaviour)
 	slog.Info("fake started assurance test", "service_id", serviceID, "test_number", testNumber, "behaviour", behaviour, "test_id", run.TestID)
 	writeJSON(w, http.StatusOK, run.Response)
+}
+
+// POST /services/{id}/set-assurance-scenario (form scenario=; dev only): how
+// the service's tests answer from now on. green (the captured fixtures),
+// nbn_fault, ntd_power, fibre_dark, router_off, fttn_no_sync,
+// fttc_no_reverse_power, or refused (every run is refused with a 422).
+func (s *fakeServer) setAssuranceScenario(w http.ResponseWriter, r *http.Request) {
+	serviceID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid service id"})
+		return
+	}
+	_ = r.ParseMultipartForm(1 << 20) // a urlencoded form is read the same way
+	name := r.FormValue("scenario")
+	if !knownScenario(name) {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"error": "unknown scenario", "scenarios": scenarioNames})
+		return
+	}
+	s.state.setScenario(serviceID, name)
+	slog.Info("fake set assurance scenario", "service_id", serviceID, "scenario", name)
+	writeJSON(w, http.StatusOK, map[string]any{"service_id": serviceID, "scenario": name})
 }
 
 // GET /services/{id}/assurance-tests/{testId}

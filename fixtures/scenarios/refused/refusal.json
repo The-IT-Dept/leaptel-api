@@ -1,0 +1,9 @@
+{
+  "_inferred": "from the green envelope and nbn's indicator rules; replace with the SVC-0001 capture (T5)",
+  "message": "The test couldn't be run on this service right now.",
+  "errors": {
+    "test_number": [
+      "The test was rejected: try again later."
+    ]
+  }
+}

@@ -436,13 +436,26 @@ func (c *Client) RunAssuranceTest(serviceID, testNumber int) (*AssuranceResult, 
 		return nil, nil, fmt.Errorf("reading response: %w", err)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, json.RawMessage(body), fmt.Errorf("POST %s: %d %s", path, resp.StatusCode, string(body))
+		return nil, json.RawMessage(body), &HTTPError{Method: "POST", Path: path, StatusCode: resp.StatusCode, Body: body}
 	}
 	var out AssuranceResult
 	if err := json.Unmarshal(body, &out); err != nil {
 		return nil, json.RawMessage(body), fmt.Errorf("unmarshalling run response: %w", err)
 	}
 	return &out, json.RawMessage(body), nil
+}
+
+// HTTPError is an answer outside 2xx: its status and body, so a caller can
+// tell what the API refused (a 4xx with its reason) from what failed on the
+// way (a gateway's 5xx page).
+type HTTPError struct {
+	Method, Path string
+	StatusCode   int
+	Body         []byte
+}
+
+func (e *HTTPError) Error() string {
+	return fmt.Sprintf("%s %s: %d %s", e.Method, e.Path, e.StatusCode, string(e.Body))
 }
 
 // GetAssuranceTest fetches a single test result by Leaptel test_id.
