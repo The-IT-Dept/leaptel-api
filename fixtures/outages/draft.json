@@ -1,0 +1,37 @@
+{
+  "outage_id": 163854,
+  "type_id": 2,
+  "outage_type": "unplanned outage",
+  "notification_description": "3kal test scope",
+  "start_time": "2026-10-24 22:00:00",
+  "finis_time": "2026-10-26 11:23:56",
+  "provider": "",
+  "provider_outage_id": "3kal test scope",
+  "provider_outage_information": "",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "internal",
+  "outage_status": "draft",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Melbourne",
+  "ts": "2026-10-26 22:23:56",
+  "update_time": "0000-00-00 00:00:00",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-10-26 22:23:56",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "",
+      "send_email": "no",
+      "resolved": "yes"
+    }
+  ],
+  "scope": {
+    "poi": [
+      "3KAL"
+    ]
+  }
+}

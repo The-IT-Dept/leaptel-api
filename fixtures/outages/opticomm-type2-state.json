@@ -1,0 +1,38 @@
+{
+  "outage_id": 131557,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "Planned maintenance for services in New South Wales and ACT",
+  "start_time": "2026-01-14 13:00:00",
+  "finis_time": "2026-01-14 17:00:00",
+  "provider": "opticomm",
+  "provider_outage_id": "",
+  "provider_outage_information": "Planned maintenance will be carried out during the specified window to complete system changes and firmware upgrades on network equipment servicing customers connected through these locations. This maintenance may result in a service interruption of up to 30 minutes during the scheduled window.",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Sydney",
+  "ts": "2026-01-07 22:22:50",
+  "update_time": "2026-01-08 09:22:50",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-01-07 10:58:03",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": " Planned maintenance will be carried out during the specified window to complete system changes and firmware upgrades on network equipment servicing customers connected through these locations. This maintenance may result in a service interruption of up to 30 minutes during the scheduled window. ",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "state_territory": [
+      "ACT",
+      "NSW"
+    ]
+  }
+}

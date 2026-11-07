@@ -1,0 +1,47 @@
+{
+  "outage_id": 77689,
+  "type_id": 2,
+  "outage_type": "unplanned outage",
+  "notification_description": "Unplanned Outage Impacting NBN Services In NSW and ACT",
+  "start_time": "2024-07-04 19:30:00",
+  "finis_time": "2024-07-04 23:04:27",
+  "provider": "vocus",
+  "provider_outage_id": "",
+  "provider_outage_information": "We are aware of an outage currently impacting NBN services in NSW and ACT. This has been escalated to our backhaul carrier for investigation. Updates will be provided as we receive further information.",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Sydney",
+  "ts": "2024-07-05 09:19:19",
+  "update_time": "2024-07-05 19:19:19",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2024-07-04 23:04:27",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2024-07-04 22:27:15",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "yes",
+      "long_update": "We are aware of an outage currently impacting NBN services in NSW and ACT. This has been escalated to our backhaul carrier for investigation. Updates will be provided as we receive further information.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "state_territory": [
+      "ACT",
+      "NSW"
+    ]
+  }
+}

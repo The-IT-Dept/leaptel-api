@@ -1,0 +1,41 @@
+{
+  "outage_id": 129126,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "nbn will soon be performing an upgrade on network elements in your area. This work is being performed during daylight hours to ensure the safety of field staff. You will experience a temporary service interruption during this work.",
+  "start_time": "2026-12-29 21:30:00",
+  "finis_time": "2026-12-30 06:30:00",
+  "provider": "nbn_direct",
+  "provider_outage_id": "CRQ000009228412",
+  "provider_outage_information": "nbn is undertaking remediation works to address an issue identified through an order. As part of this program, field technicians will be investigating the end-to-end network to resolve the problem. This work will be carried out during daylight hours to ensure the safety of our field staff.",
+  "provider_location": "Belair, SA",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Adelaide",
+  "ts": "2025-12-12 16:04:10",
+  "update_time": "2025-12-13 02:55:51",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2025-12-12 05:04:10",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn will soon be performing an upgrade on network elements in your area. This work is being performed during daylight hours to ensure the safety of field staff. You will experience a temporary service interruption during this work.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2025-12-11 06:24:02",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn will soon be performing an upgrade on network elements in your area. This work is being performed during daylight hours to ensure the safety of field staff. You will experience a temporary service interruption during this work.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ]
+}

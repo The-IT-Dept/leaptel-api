@@ -1,0 +1,55 @@
+{
+  "outage_id": 140236,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "nbn\u00ae will soon be performing work to upgrade software on the network.  During this overnight activity, you will temporarily be unable to connect to the nbn network.",
+  "start_time": "2026-03-31 13:00:00",
+  "finis_time": "2026-03-31 15:04:16",
+  "provider": "nbn_direct",
+  "provider_outage_id": "CRQ000009297828",
+  "provider_outage_information": "nbn will be deploying a software update to prevent possible network impact caused by an identified production defect in the next generation Optical Line Terminal (ngOLT). During this update, Provisioning and Testing & Diagnostics will not be available. The processing of fulfilment orders (AVC, & CVC) will be temporarily queued while work is underway, however RSPs may continue to successfully submit Orders via the nbn\u00ae Service Portal and API.",
+  "provider_location": "NSW, VIC",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Sydney",
+  "ts": "2026-04-01 02:04:16",
+  "update_time": "2026-04-01 12:54:34",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-03-31 15:04:07",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn\u00ae will soon be performing work to upgrade software on the network.  During this overnight activity, you will temporarily be unable to connect to the nbn network.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-03-31 13:04:11",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn\u00ae will soon be performing work to upgrade software on the network.  During this overnight activity, you will temporarily be unable to connect to the nbn network.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-03-13 01:24:03",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn\u00ae will soon be performing work to upgrade software on the network.  During this overnight activity, you will temporarily be unable to connect to the nbn network.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "service": [
+      "9000001"
+    ]
+  }
+}

@@ -10,6 +10,7 @@ package leaptel
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"regexp"
@@ -62,11 +63,13 @@ func (c *Client) For(serviceID, orderID int64) *Client {
 
 // newRequest builds a request carrying the client's scope for the recorder.
 func (c *Client) newRequest(method, url string, body io.Reader) (*http.Request, error) {
-	req, err := http.NewRequest(method, url, body)
-	if err != nil {
-		return nil, err
-	}
-	return req.WithContext(context.WithValue(req.Context(), scopeKey{}, c.scope)), nil
+	return c.newRequestCtx(context.Background(), method, url, body)
+}
+
+// newRequestCtx is newRequest under the caller's context (its deadline, and
+// the pacer's priority).
+func (c *Client) newRequestCtx(ctx context.Context, method, url string, body io.Reader) (*http.Request, error) {
+	return http.NewRequestWithContext(context.WithValue(ctx, scopeKey{}, c.scope), method, url, body)
 }
 
 // IsWrite reports whether a Leaptel call changes something there: anything
@@ -82,6 +85,22 @@ func IsWrite(method, path string) bool {
 		p = p[:i]
 	}
 	return p != "/service-qualifications" && !strings.Contains(p, "/assurance-tests")
+}
+
+var serviceOutagesPath = regexp.MustCompile(`^/services/\d+/outages(?:/|$)`)
+
+// isOutageRead reports whether a call reads outage records: GET /outages,
+// /outages/{id} or /services/{id}/outages. A page is 60-100 KB and they run
+// all day, so a successful one is recorded without its body.
+func isOutageRead(method, path string) bool {
+	if method != http.MethodGet {
+		return false
+	}
+	p := path
+	if i := strings.IndexByte(p, '?'); i >= 0 {
+		p = p[:i]
+	}
+	return p == "/outages" || strings.HasPrefix(p, "/outages/") || serviceOutagesPath.MatchString(p)
 }
 
 var (
@@ -115,12 +134,14 @@ func capBody(b []byte) (string, bool) {
 	return s[:cut], true
 }
 
-// recorder is the client's transport: it records every call (sink) and
-// enforces the safety stop on writes (breaker). Either may be nil.
+// recorder is the client's transport: it records every call (sink),
+// enforces the safety stop on writes (breaker) and paces outage reads and
+// assurance calls (pacer). Any of them may be nil.
 type recorder struct {
 	base    http.RoundTripper
 	sink    CallSink
 	breaker Breaker
+	pacer   *Pacer // shared by every copy; nil: nothing is paced
 	baseURL string
 	timeout time.Duration
 }
@@ -132,6 +153,17 @@ func (r *recorder) record(ctx context.Context, c Call) {
 }
 
 func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
+	path := strings.TrimPrefix(req.URL.String(), r.baseURL)
+	paced := r.pacer != nil && isPaced(req.Method, path)
+	if paced {
+		// Before the timeout starts: time in the queue isn't the call's.
+		if err := r.pacer.Wait(req.Context(), priorityOf(req)); err != nil {
+			if req.Body != nil {
+				req.Body.Close() // not sent
+			}
+			return nil, err
+		}
+	}
 	start := time.Now()
 	if r.timeout > 0 {
 		ctx, cancel := context.WithTimeout(req.Context(), r.timeout)
@@ -153,7 +185,6 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 		req.GetBody = func() (io.ReadCloser, error) { return io.NopCloser(bytes.NewReader(b)), nil }
 		req.ContentLength = int64(len(b))
 	}
-	path := strings.TrimPrefix(req.URL.String(), r.baseURL)
 	call := Call{At: start, Method: req.Method, Path: path, Write: IsWrite(req.Method, path)}
 	if call.Write && r.breaker != nil {
 		if tripped, err := r.breaker.Tripped(req.Context()); err != nil || tripped {
@@ -177,8 +208,14 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	resp.Body.Close()
 	resp.Body = io.NopCloser(bytes.NewReader(respBody))
 	call.Status = resp.StatusCode
+	if paced {
+		r.pacer.Observe(resp.StatusCode, resp.Header.Get("x-ratelimit-limit"))
+	}
 	var truncResp bool
 	call.ResponseBody, truncResp = capBody(respBody)
+	if readErr == nil && resp.StatusCode/100 == 2 && isOutageRead(req.Method, path) {
+		call.ResponseBody, truncResp = fmt.Sprintf("(not kept: %d bytes)", len(respBody)), false
+	}
 	call.Truncated = truncReq || truncResp
 	if readErr != nil {
 		call.Err = "reading response: " + readErr.Error()
@@ -186,6 +223,9 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	r.record(req.Context(), call)
 	if readErr != nil {
 		return nil, r.stopIfBroken(req, call, nil, readErr)
+	}
+	if paced && resp.StatusCode == http.StatusTooManyRequests {
+		return nil, fmt.Errorf("%s %s: %w", req.Method, path, ErrRateLimited) // never a write: no trip
 	}
 	if err := r.stopIfBroken(req, call, respBody, nil); err != nil {
 		return nil, err

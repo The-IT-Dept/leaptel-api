@@ -1,0 +1,38 @@
+{
+  "outage_id": 34707,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "Network maintenance",
+  "start_time": "2021-09-21 14:00:00",
+  "finis_time": "2021-09-21 18:00:00",
+  "provider": "vocus",
+  "provider_outage_id": "",
+  "provider_outage_information": "Upgrade to the network infrastructure in Sydney. Expected to last for 2 hours but 4 hour window may be used if required.",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "wholesaler",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": null,
+  "ts": "2021-09-13 11:43:27",
+  "update_time": null,
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2021-09-13 11:44:44",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "Customers will experience an outage impacting both internet and phone services due to work being carried out in our Sydney data centre. This work is expected to take 2 hours but the entire window may be utilised if necessary.\r\n\r\nWe are undertaking this work between midnight and 4am to minimise interruption to as many customers as possible.\r\n\r\nThis work is to further upgrade the capabilities of our network and ensure ongoing reliability.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "state_territory": [
+      "ACT",
+      "NSW"
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "outage_id": 164914,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "nbn is completing scheduled works on the nbn\u00ae network in your area. This will cause your nbn service to lose connection.  \n\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by",
+  "start_time": "2026-11-30 20:15:00",
+  "finis_time": "2026-12-01 04:30:00",
+  "provider": "nbn_direct",
+  "provider_outage_id": "CRQ000009480948",
+  "provider_outage_information": "This outage will involve identifying and carrying out required repairs and performing maintenance on nbn HFC network infrastructure. Works will be performed during daylight hours due to residential noise restrictions and to protect the safety of technicians and public in the area.",
+  "provider_location": "WEST BEACH, SA",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Adelaide",
+  "ts": "2026-11-03 17:54:02",
+  "update_time": "2026-11-03 17:47:01",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-11-03 17:54:02",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn is completing scheduled works on the nbn\u00ae network in your area. This will cause your nbn service to lose connection.  \n\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-11-03 17:34:04",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn is completing scheduled works on the nbn\u00ae network in your area. This will cause your nbn service to lose connection.  \n\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ]
+}

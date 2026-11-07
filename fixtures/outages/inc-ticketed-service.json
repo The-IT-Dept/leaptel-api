@@ -1,0 +1,145 @@
+{
+  "outage_id": 133939,
+  "type_id": 2,
+  "outage_type": "ticketed outage",
+  "notification_description": "From NBN Network & Service Operations : Please be advised, services have been confirmed restored since 17:54 AEDT. Monitoring has been in place to confirm network stability. The incident has now been closed.",
+  "start_time": "2026-01-23 16:57:00",
+  "finis_time": "2026-01-24 18:48:41",
+  "provider": "nbn",
+  "provider_outage_id": "INC000021725902",
+  "provider_outage_information": "From NBN Network & Service Operations : Please be advised, services have been confirmed restored since 17:54 AEDT. Monitoring has been in place to confirm network stability. The incident has now been closed.",
+  "provider_location": "Chain Valley Bay, NSW",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Sydney",
+  "ts": "2026-01-24 18:48:41",
+  "update_time": "2026-01-25 05:48:31",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-01-24 07:48:40",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Please be advised, services have been confirmed restored since 17:54 AEDT. Monitoring has been in place to confirm network stability. The incident has now been closed.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-24 05:33:29",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Connectivity has been restored to the node; however, health checks have detected data loss. Investigations onsite continue, and updates will be published as new information is received from the field.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-24 04:04:55",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : The technicians remain onsite working to restore services; however, a software issue impacting the technician's equipment is delaying progress. The issue has been escalated and nbn is working to restore services with urgency. An updated ETR will be published as soon as one is available.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-24 02:28:13",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : The technician is back onsite with required equipment. The rebuild procedure has commenced. An ETR will be communicated once an update from the technician has been received.\n",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-24 01:42:45",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Due to delays sourcing the required materials and equipment, the technicians are on route back to site now. An updated ETR will be published when the technicians have returned to site and have confirmed new timelines.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 23:11:58",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "Additional technical support has been engaged to assist with troubleshooting. The technicians are currently offsite collecting the required equipment and are expected to be back onsite by 12:00 AEDT on 24/01. An updated ETR will be published when new timelines are confirmed.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 23:08:34",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "Additional technical support has been engaged to assist with troubleshooting. The technicians are currently offsite collecting the required equipment and are expected to be back onsite by 11:30 AEDT on 24/01. Updates will be published if timelines change.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 23:01:49",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The technician remains on-site troubleshooting with senior engineering teams. The ETR has been updated to 12:00 AEDT on 24 January; and updates will be published when received from the field.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 20:40:06",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The technician is on-site investigating the fault. The ETR has been updated to 10:00 AEDT on 24 January; and updates will be published when available.\n",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 18:50:09",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The field technician is estimated to arrive to the impacted site by 24/01/2026 by 07:00",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 18:44:48",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The technician has provided an ETA of 06:00. nbn will provide an update once they arrive.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 17:18:48",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn network engineers have performed remote troubleshooting on the Optical Line Terminal (OLT) and determined that a field technician is required. nbn has requested a technician to attend the site and investigate the loss of service. An update will be provided once an ETA is available.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-01-23 16:57:05",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "service": [
+      "9000001"
+    ]
+  }
+}

@@ -35,6 +35,8 @@ type state struct {
 	services      map[int]*leaptel.Service
 	appointments  map[string]*fakeAppt
 	assuranceRuns map[int]*fakeAssuranceRun
+	outages       map[int]json.RawMessage // records added in dev (the fixtures are in outageFixtures)
+	outageLinks   map[int][]int           // service id -> outage ids attached in dev
 }
 
 func newState() *state {
@@ -49,6 +51,8 @@ func newState() *state {
 		services:          map[int]*leaptel.Service{},
 		appointments:      map[string]*fakeAppt{},
 		assuranceRuns:     map[int]*fakeAssuranceRun{},
+		outages:           map[int]json.RawMessage{},
+		outageLinks:       map[int][]int{},
 	}
 }
 
@@ -80,7 +84,8 @@ func loadState(path string) *state {
 		"orders", len(s.orders),
 		"services", len(s.services),
 		"appointments", len(s.appointments),
-		"assurance_runs", len(s.assuranceRuns))
+		"assurance_runs", len(s.assuranceRuns),
+		"outages", len(s.outages))
 	return s
 }
 
@@ -96,6 +101,8 @@ type stateSnapshot struct {
 	Services          map[int]*leaptel.Service  `json:"services"`
 	Appointments      map[string]*fakeAppt      `json:"appointments"`
 	AssuranceRuns     map[int]*fakeAssuranceRun `json:"assurance_runs"`
+	Outages           map[int]json.RawMessage   `json:"outages,omitempty"`
+	OutageLinks       map[int][]int             `json:"outage_links,omitempty"`
 }
 
 // applyTo copies snapshot fields into s. Missing maps become empty.
@@ -126,6 +133,12 @@ func (snap *stateSnapshot) applyTo(s *state) {
 	if snap.AssuranceRuns != nil {
 		s.assuranceRuns = snap.AssuranceRuns
 	}
+	if snap.Outages != nil {
+		s.outages = snap.Outages
+	}
+	if snap.OutageLinks != nil {
+		s.outageLinks = snap.OutageLinks
+	}
 }
 
 // save writes the current state to disk via atomic rename. Caller MUST
@@ -146,6 +159,8 @@ func (s *state) save() {
 		Services:          s.services,
 		Appointments:      s.appointments,
 		AssuranceRuns:     s.assuranceRuns,
+		Outages:           s.outages,
+		OutageLinks:       s.outageLinks,
 	}
 	b, err := json.MarshalIndent(snap, "", "  ")
 	if err != nil {

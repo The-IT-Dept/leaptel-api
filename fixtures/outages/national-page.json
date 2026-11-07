@@ -1,0 +1,853 @@
+{
+  "pagination": {
+    "total_records": 165316,
+    "current_page": 1,
+    "next_page": 2,
+    "previous_page": null,
+    "records_per_page": 50,
+    "total_pages": 3307
+  },
+  "outages": [
+    {
+      "outage_id": 165408,
+      "type_id": 8,
+      "outage_type": "unplanned outage",
+      "notification_description": "Unplanned outage for services in North Parramatta, NSW",
+      "start_time": "2026-11-06 10:25:00",
+      "finis_time": "2026-11-06 11:23:19",
+      "provider": "opticomm",
+      "provider_outage_id": "OTT000000440170",
+      "provider_outage_information": "Opticomm is aware of an unplanned network outage impacting services. They are working to restore services as quickly and safely as possible.",
+      "provider_location": "",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Sydney",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 22:23:19",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "OptiComm",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 22:23:19",
+          "updated_by": "staff_a",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 22:19:58",
+          "updated_by": "staff_a",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "Opticomm is aware of an unplanned network outage impacting services. They are working to restore services as quickly and safely as possible.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ],
+      "scope": {
+        "estate": [
+          "2 Example St"
+        ]
+      }
+    },
+    {
+      "outage_id": 165407,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 11:01:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619453",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "Taringa, QLD 4068",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 22:01:40",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 22:01:39",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165406,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 10:50:00",
+      "finis_time": "2026-11-06 22:21:38",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619332",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "ORMISTON,QLD-4160",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 22:21:38",
+      "update_time": "2026-11-06 22:21:33",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 22:21:38",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "No information has been provided.",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 21:50:48",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165405,
+      "type_id": 8,
+      "outage_type": "planned outage",
+      "notification_description": "Planned outage for services in Logan Reserve, Chambers Flat, QLD",
+      "start_time": "2026-11-23 12:59:00",
+      "finis_time": "2026-11-23 19:00:00",
+      "provider": "opticomm",
+      "provider_outage_id": "OCR000000439972",
+      "provider_outage_information": "Opticomm will be conducting expedited network maintenance. This work is part of their ongoing efforts to ensure the continued reliability, stability and performance of our network infrastructure.\r\n\r\nDuring this window, services in affected locations and communities may be unable to connect to the network.",
+      "provider_location": "",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Brisbane",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 19:32:43",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "OptiComm",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 19:32:59",
+          "updated_by": "staff_a",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "Opticomm will be conducting expedited network maintenance. This work is part of their ongoing efforts to ensure the continued reliability, stability and performance of our network infrastructure.\r\n\r\nDuring this window, services in affected locations and communities may be unable to connect to the network.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ],
+      "scope": {
+        "estate": [
+          "3 Example Rd",
+          "Chambers Pines",
+          "Logan Reserve Residential Sub-division",
+          "Sanctuary Residences",
+          "Sequana",
+          "Stoneleigh",
+          "The Verge"
+        ]
+      }
+    },
+    {
+      "outage_id": 165404,
+      "type_id": 8,
+      "outage_type": "planned outage",
+      "notification_description": "Planned outage for services in Shellharbour City Centre, NSW",
+      "start_time": "2026-11-16 21:00:00",
+      "finis_time": "2026-11-17 05:00:00",
+      "provider": "opticomm",
+      "provider_outage_id": "OCR000000439614",
+      "provider_outage_information": "Opticomm will be conducting expedited network maintenance. This work is part of their ongoing efforts to ensure the continued reliability, stability and performance of our network infrastructure.\r\n\r\nDuring this window, services in affected locations and communities may be unable to connect to the network.",
+      "provider_location": "",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Sydney",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 19:29:49",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "OptiComm",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 19:30:09",
+          "updated_by": "staff_a",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "Opticomm will be conducting expedited network maintenance. This work is part of their ongoing efforts to ensure the continued reliability, stability and performance of our network infrastructure.\r\n\r\nDuring this window, services in affected locations and communities may be unable to connect to the network.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ],
+      "scope": {
+        "estate": [
+          "Benson Apartments 2529"
+        ]
+      }
+    },
+    {
+      "outage_id": 165403,
+      "type_id": 2,
+      "outage_type": "planned outage",
+      "notification_description": "nbn\u00ae is working hard to resolve a network issue in your area. This emergency work will cause a temporary loss of connectivity to your nbn service.\r\nUsing mobile data where available can help you stay connected if needed. Check the nbn Network Outages webs",
+      "start_time": "2026-11-06 08:20:00",
+      "finis_time": "2026-11-06 09:24:03",
+      "provider": "nbn_direct",
+      "provider_outage_id": "CRQ100000452486",
+      "provider_outage_information": "nbn is responding to an unexpected issue in your area that requires urgent work on the nbn network. This work may cause a temporary outage to your nbn service.  \r\n \r\nWhile nbn is working to resolve the issue and restore your connection, use mobile data if you have it available to help you stay connected during this time.",
+      "provider_location": "GREYSTANES, NSW",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 20:24:03",
+      "update_time": "2026-11-06 20:09:34",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 20:24:03",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is working hard to resolve a network issue in your area. This emergency work will cause a temporary loss of connectivity to your nbn service.\r\nUsing mobile data where available can help you stay connected if needed. Check the nbn Network Outages website periodically for the latest updates.",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 20:04:03",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is working hard to resolve a network issue in your area. This emergency work will cause a temporary loss of connectivity to your nbn service.\r\nUsing mobile data where available can help you stay connected if needed. Check the nbn Network Outages website periodically for the latest updates.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 19:24:02",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is working hard to resolve a network issue in your area. This emergency work will cause a temporary loss of connectivity to your nbn service.\r\nUsing mobile data where available can help you stay connected if needed. Check the nbn Network Outages website periodically for the latest updates.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165402,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : A field technician has been assigned to attend the site and investigate an issue with a faulty network device. An ETA of 01:00 AEDT has been advised. ",
+      "start_time": "2026-11-06 07:26:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619205",
+      "provider_outage_information": "From NBN Network & Service Operations : A field technician has been assigned to attend the site and investigate an issue with a faulty network device. An ETA of 01:00 AEDT has been advised. ",
+      "provider_location": "WOODVALE,WA-6026",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Perth",
+      "ts": "2026-11-06 21:47:53",
+      "update_time": "2026-11-06 21:47:48",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 21:47:53",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A field technician has been assigned to attend the site and investigate an issue with a faulty network device. An ETA of 01:00 AEDT has been advised. ",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 21:29:55",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 07/11/2026 by 00:30",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 21:24:34",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : nbn's remote troubleshooting has identified a potential issue with a network device at the site that was unable to be corrected remotely and has caused a loss of service. A field technician has been assigned to attend the site and perform further investigations. Updates will be provided as more information, or an ETA, becomes available.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 18:26:58",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165401,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : A field technician is now on-site to investigate an issue with a faulty network device. An ETR of 23:30 AEDT has been advised, with progress updates to be communicated as they become available.",
+      "start_time": "2026-11-06 07:04:00",
+      "finis_time": "2026-11-06 22:05:23",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619201",
+      "provider_outage_information": "From NBN Network & Service Operations : A field technician is now on-site to investigate an issue with a faulty network device. An ETR of 23:30 AEDT has been advised, with progress updates to be communicated as they become available.",
+      "provider_location": "Oxenford, QLD",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 22:05:23",
+      "update_time": "2026-11-06 22:05:17",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 22:03:02",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A field technician is now on-site to investigate an issue with a faulty network device. An ETR of 23:30 AEDT has been advised, with progress updates to be communicated as they become available.",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 21:28:29",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A field technician is now on-site to investigate an issue with a faulty network device. An ETR of 23:30 AEDT has been advised, with progress updates to be communicated as they become available.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 20:32:45",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A technician has been assigned and is expected on-site at approximately 21:30 PM AEST. nbn will provide an update once further information is reported back from Field Services.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 18:12:02",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : Remote troubleshooting activities are underway on a loss of signal to the node alarm. If services are unable to be restored remotely, a technician will be dispatched to the site.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 18:04:09",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165400,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 10/11/2026 by 09:30",
+      "start_time": "2026-11-06 06:25:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022615562",
+      "provider_outage_information": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 10/11/2026 by 09:30",
+      "provider_location": "VERMONT SOUTH, VIC",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Melbourne",
+      "ts": "2026-11-06 17:32:27",
+      "update_time": "2026-11-06 17:32:22",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 17:32:27",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 10/11/2026 by 09:30",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 17:25:37",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165399,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 06:17:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619349",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "MANLY,QLD-4179",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 17:17:20",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 17:17:20",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165398,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 05:55:00",
+      "finis_time": "2026-11-06 17:11:38",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619182",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "Bathurst, NSW",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 17:11:38",
+      "update_time": "2026-11-06 17:11:33",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 17:03:25",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "No information has been provided.",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 16:56:02",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165397,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 09/11/2026 by 17:00",
+      "start_time": "2026-11-06 05:43:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022616697",
+      "provider_outage_information": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 09/11/2026 by 17:00",
+      "provider_location": "ENDEAVOUR HILLS,VIC-3802",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Melbourne",
+      "ts": "2026-11-06 16:51:18",
+      "update_time": "2026-11-06 16:51:13",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:51:18",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : The field technician is estimated to arrive to the impacted site by 09/11/2026 by 17:00",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 16:43:12",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165396,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 05:37:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022616897",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "DOONSIDE,NSW-2767",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 16:37:55",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:37:55",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165395,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : A local power outage is impacting the nbn network causing a loss of service to customers. nbn is monitoring the situation and once the power is restored, nbn will test alarms and perform health checks on the network",
+      "start_time": "2026-11-06 05:37:00",
+      "finis_time": "2026-11-06 22:17:50",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619116",
+      "provider_outage_information": "From NBN Network & Service Operations : A local power outage is impacting the nbn network causing a loss of service to customers. nbn is monitoring the situation and once the power is restored, nbn will test alarms and perform health checks on the network to confirm stability. Please contact the local power provider for more information including the Estimated Time to Restore (ETR). nbn recommends customers perform a reset of their modem and in-home equipment once the power is restored to their area if further issues are experienced.\n",
+      "provider_location": "CRAIGIE,WA-6025",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Perth",
+      "ts": "2026-11-06 22:17:50",
+      "update_time": "2026-11-06 22:17:44",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 17:04:03",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A local power outage is impacting the nbn network causing a loss of service to customers. nbn is monitoring the situation and once the power is restored, nbn will test alarms and perform health checks on the network to confirm stability. Please contact the local power provider for more information including the Estimated Time to Restore (ETR). nbn recommends customers perform a reset of their modem and in-home equipment once the power is restored to their area if further issues are experienced.\n",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 16:39:07",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : A local power outage is impacting the nbn network causing a loss of service to customers. nbn is monitoring the situation and once the power is restored, nbn will test alarms and perform health checks on the network to confirm stability. Please contact the local power provider for more information including the Estimated Time to Restore (ETR). nbn recommends customers perform a reset of their modem and in-home equipment once the power is restored to their area if further issues are experienced.\n",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 16:37:27",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "A local power outage is impacting the nbn network causing a loss of service to customers. nbn is monitoring the situation and once the power is restored, nbn will test alarms and perform health checks on the network to confirm stability. Please contact the local power provider for more information including the Estimated Time to Restore (ETR). nbn recommends customers perform a reset of their modem and in-home equipment once the power is restored to their area if further issues are experienced.\n",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165394,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "No information has been provided.",
+      "start_time": "2026-11-06 05:32:00",
+      "finis_time": "2026-11-06 17:39:16",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022619166",
+      "provider_outage_information": "No information has been provided.",
+      "provider_location": "Penneshaw, SA",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Adelaide",
+      "ts": "2026-11-06 17:39:16",
+      "update_time": "2026-11-06 17:39:11",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 17:35:28",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "No information has been provided.",
+          "send_email": "yes",
+          "resolved": "yes"
+        },
+        {
+          "update_date": "2026-11-06 16:33:31",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "No information has been provided.",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 16:32:19",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165393,
+      "type_id": 2,
+      "outage_type": "planned outage",
+      "notification_description": "nbn\u00ae is completing upgrades on the nbn network in your area. This will cause your nbn service to lose connection.\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by download",
+      "start_time": "2026-11-23 13:00:00",
+      "finis_time": "2026-11-23 19:00:00",
+      "provider": "nbn_direct",
+      "provider_outage_id": "CRQ100000444869",
+      "provider_outage_information": "FTTB\u2011to\u2011FTTP sites are now included in the Complex MDU technology upgrade program. Applicable FTTB\u2011to\u2011FTTP sites will utilise spare fibre capacity available within the lead\u2011in cable. A planned customer\u2011impacting CRQ is required to implement the solution.\r\n\r\nAs part of the upgrade, hardware will be installed upstream of the DSLAM node to intercept the lead\u2011in Hub\u2011sheath Segment Distribution (HSD) cables, enabling FTTP connectivity via the spare fibres.",
+      "provider_location": "Preston, VIC",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Melbourne",
+      "ts": "2026-11-06 16:24:03",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:24:03",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is completing upgrades on the nbn network in your area. This will cause your nbn service to lose connection.\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165392,
+      "type_id": 2,
+      "outage_type": "planned outage",
+      "notification_description": "nbn\u00ae is completing scheduled works on the nbn network in your area. This will cause your nbn service to lose connection.  \r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine ",
+      "start_time": "2026-11-23 20:00:00",
+      "finis_time": "2026-11-30 08:00:00",
+      "provider": "nbn_direct",
+      "provider_outage_id": "CRQ100000418989",
+      "provider_outage_information": "These planned works are part of a broader program aimed at addressing performance degradation issues on the HFC network. Activities may include optimising the alignment between the inside plant and the node, refining the alignment from the node to downstream amplifiers, and adjusting network amplifier configurations. The scope of work may also involve replacing TAPs and HFC cabling where necessary.\r\n\r\nCustomers may experience service interruptions at any point during the change window, depending on their location within the network cascade. Please refer to the interruption table in this notice for more details.",
+      "provider_location": "Bondi, NSW",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Sydney",
+      "ts": "2026-11-06 16:24:02",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:24:03",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is completing scheduled works on the nbn network in your area. This will cause your nbn service to lose connection.  \r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165391,
+      "type_id": 2,
+      "outage_type": "ticketed outage",
+      "notification_description": "From NBN Network & Service Operations : The field technician is now on-site to commence restoration activities. Customers may experience a loss of connectivity at this time. Due to the nature of this work, one or more network elements may need to be repai",
+      "start_time": "2026-11-06 05:18:00",
+      "finis_time": "0000-00-00 00:00:00",
+      "provider": "nbn",
+      "provider_outage_id": "INC000022616895",
+      "provider_outage_information": "From NBN Network & Service Operations : The field technician is now on-site to commence restoration activities. Customers may experience a loss of connectivity at this time. Due to the nature of this work, one or more network elements may need to be repaired, and this may also disconnect the network upstream affecting additional customers",
+      "provider_location": "MULGRAVE,VIC-3170",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Melbourne",
+      "ts": "2026-11-06 16:42:34",
+      "update_time": "2026-11-06 16:42:26",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:40:35",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : The field technician is now on-site to commence restoration activities. Customers may experience a loss of connectivity at this time. Due to the nature of this work, one or more network elements may need to be repaired, and this may also disconnect the network upstream affecting additional customers",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 16:29:32",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "From NBN Network & Service Operations : The field technician has revised the estimated arrival time to 09/11/2026 by 16:30",
+          "send_email": "yes",
+          "resolved": "no"
+        },
+        {
+          "update_date": "2026-11-06 16:18:44",
+          "updated_by": "get_trouble_tickets",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165390,
+      "type_id": 2,
+      "outage_type": "planned outage",
+      "notification_description": "nbn is completing upgrades on the nbn\u00ae network in your area. This will cause your nbn\u00ae service to lose connection.  \r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by dow",
+      "start_time": "2026-11-23 21:00:00",
+      "finis_time": "2026-11-24 09:00:00",
+      "provider": "nbn_direct",
+      "provider_outage_id": "CRQ100000409170",
+      "provider_outage_information": "As part of a new trial, nbn is installing battery backup equipment at selected HFC nodes. When a node loses power, customers lose service even if their premises still have electricity. Battery backup will provide power resilience to nodes during planned or unplanned power related network outages.\r\n\r\nDuring this planned outage to install the battery backup, end users may experience multiple service interruptions within the outage window while work is underway.\r\n\r\nDue to safety, noise, lighting and power authority requirements, work must be performed during the day. Please refer to the scheduled dates and times for further information.",
+      "provider_location": "Redcliffe, QLD",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 16:14:02",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:14:02",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn is completing upgrades on the nbn\u00ae network in your area. This will cause your nbn\u00ae service to lose connection.  \r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    },
+    {
+      "outage_id": 165389,
+      "type_id": 2,
+      "outage_type": "planned outage",
+      "notification_description": "nbn\u00ae is completing upgrades on the nbn network in your area. This will cause your nbn service to lose connection.\r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downlo",
+      "start_time": "2026-11-23 21:00:00",
+      "finis_time": "2026-11-30 09:00:00",
+      "provider": "nbn_direct",
+      "provider_outage_id": "CRQ100000418990",
+      "provider_outage_information": "These planned works are part of a large program to uplift HFC network. The work will involve replacing a node, aligning the inside plant to the node and then replacing network amplifiers\r\n\r\nCustomers may be impacted throughout the entire change window, depending on their location in the network cascade. Please refer to the interruption table in this notice.",
+      "provider_location": "Apsley Depot, QLD",
+      "provider_service_id": "",
+      "provider_url": "",
+      "visibility": "customer",
+      "outage_status": "published",
+      "timezone": "Australia/Melbourne",
+      "public_timezone": "Australia/Brisbane",
+      "ts": "2026-11-06 16:04:06",
+      "update_time": "0000-00-00 00:00:00",
+      "service_type": "NBN",
+      "outage_updates": [
+        {
+          "update_date": "2026-11-06 16:04:08",
+          "updated_by": "nbn_outage_notification",
+          "short_update": "",
+          "send_sms": "no",
+          "long_update": "nbn\u00ae is completing upgrades on the nbn network in your area. This will cause your nbn service to lose connection.\r\n\r\nUsing mobile data where available can help you stay connected while your service is offline. Minimise disruption to your routine by downloading required files and switching to offline work modes.",
+          "send_email": "yes",
+          "resolved": "no"
+        }
+      ]
+    }
+  ]
+}

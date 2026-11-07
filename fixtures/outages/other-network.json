@@ -1,0 +1,37 @@
+{
+  "outage_id": 165360,
+  "type_id": 16,
+  "outage_type": "unplanned outage",
+  "notification_description": "Unplanned Power Outage for Services at 1 Example Road, Balwyn, Vic",
+  "start_time": "2026-11-05 17:46:00",
+  "finis_time": "0000-00-00 00:00:00",
+  "provider": "",
+  "provider_outage_id": "",
+  "provider_outage_information": "Lynham has advised that the flooding in the building has impacted their on-site equipment. At this stage, the local power company will be the best point of contact for updates.\r\n\r\nTo avoid any further disruptions, please do not press the reset button on your router, as this will not resolve the issue.\r\n\r\nWe sincerely apologize for any inconvenience this may cause and appreciate your patience and understanding.\r\n",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "",
+  "ts": "2026-11-06 13:42:16",
+  "update_time": "0000-00-00 00:00:00",
+  "service_type": "Lynham",
+  "outage_updates": [
+    {
+      "update_date": "2026-11-06 13:42:27",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "Lynham has advised that the flooding in the building has impacted their on-site equipment. At this stage, the local power company will be the best point of contact for updates.\r\n\r\nTo avoid any further disruptions, please do not press the reset button on your router, as this will not resolve the issue.\r\n\r\nWe sincerely apologize for any inconvenience this may cause and appreciate your patience and understanding.",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "tower_id": [
+      "T100206"
+    ]
+  }
+}

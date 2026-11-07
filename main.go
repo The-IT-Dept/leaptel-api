@@ -21,8 +21,14 @@
 //	  - POST   /services/{id}/assurance-tests
 //	  - GET    /services/{id}/assurance-tests/{testId}
 //	  - GET    /services/{id}/assurance-tests-history
+//	  - GET    /outages, /outages/{id}, /services/{id}/outages (from the
+//	           scrubbed fixtures/outages, with the upstream's 10-a-minute
+//	           limit; see outages.go)
+//	  - POST   /outages, /services/{id}/outages (dev-only: add a record,
+//	           attach one to a service)
 //
-// State is in-memory only; restart wipes everything.
+// State is in memory, and saved to -state-file when one is set (records and
+// attachments added in dev included).
 package main
 
 import (
@@ -78,7 +84,7 @@ func (srv *fakeServer) routes() chi.Router {
 	r.Get("/orders/{id}", requireAuth(srv.getOrder))
 	r.Patch("/orders/{id}/appointment", requireAuth(srv.attachAppointment))
 
-	r.Get("/services/{id}", requireAuth(srv.getService))
+	r.Get("/services/{id}", withLimitHeader(serviceReadsLimit, requireAuth(srv.getService)))
 	r.Post("/services/{id}/modify", requireAuth(srv.modifyService))
 	r.Post("/services/{id}/cancel", requireAuth(srv.cancelService))
 	r.Post("/services/{id}/cease", requireAuth(srv.ceaseService))      // dev-only: simulate carrier churn
@@ -89,6 +95,14 @@ func (srv *fakeServer) routes() chi.Router {
 
 	r.Get("/appointments/time-slots", requireAuth(srv.listTimeslots))
 	r.Post("/appointments", requireAuth(srv.createAppointment))
+
+	// Outage reads share the upstream's limit (outages.go).
+	lim := newOutageLimiter(time.Now)
+	r.Get("/outages", requireAuth(lim.limit(srv.listOutages)))
+	r.Get("/outages/{id}", requireAuth(lim.limit(srv.getOutage)))
+	r.Get("/services/{id}/outages", requireAuth(lim.limit(srv.listServiceOutages)))
+	r.Post("/outages", requireAuth(srv.putOutage))                  // dev-only: add or replace a record
+	r.Post("/services/{id}/outages", requireAuth(srv.attachOutage)) // dev-only: simulate the upstream's match
 	return r
 }
 

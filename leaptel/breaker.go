@@ -74,7 +74,9 @@ func (c *Client) WithTimeout(d time.Duration) *Client {
 }
 
 // transport makes cp's HTTP client use its own copy of the recording
-// transport (wrapping whatever it had) and returns it for configuring.
+// transport (wrapping whatever it had) and returns it for configuring. The
+// copy keeps the same sink, breaker and pacer: one pacer per process means
+// every copy of a client queues in it.
 func (c *Client) transport() *recorder {
 	hc := *c.http
 	var rec recorder

@@ -1,0 +1,113 @@
+{
+  "outage_id": 165277,
+  "type_id": 2,
+  "outage_type": "ticketed outage",
+  "notification_description": "From NBN Network & Service Operations : Cables have arrived onsite and restoration works have commenced. Current ETR is 4pm.",
+  "start_time": "2026-11-05 17:10:00",
+  "finis_time": "2026-11-06 15:38:26",
+  "provider": "nbn",
+  "provider_outage_id": "INC000022617583",
+  "provider_outage_information": "From NBN Network & Service Operations : Cables have arrived onsite and restoration works have commenced. Current ETR is 4pm.",
+  "provider_location": "North Arm Cove NSW",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Sydney",
+  "ts": "2026-11-06 15:38:26",
+  "update_time": "2026-11-06 15:38:19",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-11-06 15:32:50",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Cables have arrived onsite and restoration works have commenced. Current ETR is 4pm.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-11-06 14:22:54",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Cables have arrived onsite and restoration works have commenced. Current ETR is 4pm.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 11:46:26",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "From NBN Network & Service Operations : Restoration has been delayed due to the requirement for additional cables, which are expected to arrive on site at approximately 13:00. The revised ETR is 16:00 today, ",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 09:24:28",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The third-party network provider has confirmed a fibre cable cut due to vandalism. Current ETR provided is 1pm.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 08:06:32",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The third-party network providers technicians have arrived onsite and are investigating.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 07:26:33",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "This incident is a Significant Local Outage as defined under the Telecommunications (Customer Communications for Outages) Industry Standard 2024.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 06:49:03",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "The fault has been identified within a third-party provider\u2019s network. Fibre technicians are enroute to the site, with an ETA currently unavailable.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 05:32:11",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "nbn network engineers are investigating an alarm that indicates a possible fibre break on a network path that has caused a loss of service. If the issue is unable to be corrected remotely, a field technician will be sent to the site and perform investigations. Further updates will be provided as more information, or an ETA, becomes available.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 04:16:03",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "No information has been provided.",
+      "send_email": "yes",
+      "resolved": "no"
+    },
+    {
+      "update_date": "2026-11-06 04:10:36",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ]
+}

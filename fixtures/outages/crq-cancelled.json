@@ -1,0 +1,41 @@
+{
+  "outage_id": 164915,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "This notification is to let you know that nbn will be performing network maintenance work. Due to this activity the services listed below will experience a loss of connectivity for up to 2 hrs 30 mins during the change window",
+  "start_time": "2026-11-30 20:15:00",
+  "finis_time": "2026-12-01 04:30:00",
+  "provider": "nbn_direct",
+  "provider_outage_id": "CRQ000009481043",
+  "provider_outage_information": "This outage will involve identifying and carrying out required repairs and performing maintenance on nbn HFC network infrastructure. Works will be performed during daylight hours due to residential noise restrictions and to protect the safety of technicians and public in the area.",
+  "provider_location": "FULHAM GARDENS, SA",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Adelaide",
+  "ts": "2026-11-03 18:04:04",
+  "update_time": "2026-11-03 17:54:50",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-11-03 18:04:04",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "This notification is to let you know that nbn will be performing network maintenance work. Due to this activity the services listed below will experience a loss of connectivity for up to 2 hrs 30 mins during the change window",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-11-03 17:34:05",
+      "updated_by": "nbn_outage_notification",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "This notification is to let you know that nbn will be performing network maintenance work. Due to this activity the services listed below will experience a loss of connectivity for up to 2 hrs 30 mins during the change window",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ]
+}

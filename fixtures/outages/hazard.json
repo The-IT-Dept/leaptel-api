@@ -1,0 +1,26 @@
+{
+  "outage_id": 4551,
+  "type_id": 2,
+  "outage_type": "hazard notice",
+  "notification_description": "Vocus NSW dropouts",
+  "start_time": "2020-04-06 14:00:15",
+  "finis_time": "2020-04-06 23:00:18",
+  "provider": "vocus",
+  "provider_outage_id": "",
+  "provider_outage_information": "We have observed dropouts affecting services in NSW. Vocus has advised this is caused by an issue on their equipment and are investigating the issue.\r\nSo far the following POIs are confirmed affected:\r\n2WIN - Windsor - NSW - CSA200000010742\r\n2CAS - Castle Hill - NSW - CSA200000010167\r\n2MYF - Mayfield - NSW - CSA200000000549\r\n2CHA - Chatswood - NSW - CSA200000000179\r\n2ROC - Rockdale - NSW - CSA200000000752\r\n\r\nPlease note there may be other POIs affected beyond this list.\r\n\r\nNo ETR at present",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "internal",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": null,
+  "ts": "0000-00-00 00:00:00",
+  "update_time": null,
+  "service_type": "NBN",
+  "scope": {
+    "state_territory": [
+      "NSW"
+    ]
+  }
+}

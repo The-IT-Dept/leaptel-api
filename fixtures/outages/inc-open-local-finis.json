@@ -1,0 +1,41 @@
+{
+  "outage_id": 165406,
+  "type_id": 2,
+  "outage_type": "ticketed outage",
+  "notification_description": "No information has been provided.",
+  "start_time": "2026-11-06 10:50:00",
+  "finis_time": "2026-11-06 22:21:38",
+  "provider": "nbn",
+  "provider_outage_id": "INC000022619332",
+  "provider_outage_information": "No information has been provided.",
+  "provider_location": "ORMISTON,QLD-4160",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "customer",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": "Australia/Brisbane",
+  "ts": "2026-11-06 22:21:38",
+  "update_time": "2026-11-06 22:21:33",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2026-11-06 22:21:38",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "No information has been provided.",
+      "send_email": "yes",
+      "resolved": "yes"
+    },
+    {
+      "update_date": "2026-11-06 21:50:48",
+      "updated_by": "get_trouble_tickets",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ]
+}

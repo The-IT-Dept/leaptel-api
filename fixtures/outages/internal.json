@@ -1,0 +1,40 @@
+{
+  "outage_id": 47099,
+  "type_id": 2,
+  "outage_type": "planned outage",
+  "notification_description": "Planned Maintenance to your NBN POI",
+  "start_time": "2022-08-16 14:00:00",
+  "finis_time": "2022-08-16 17:00:00",
+  "provider": "vocus",
+  "provider_outage_id": "",
+  "provider_outage_information": "Our network team have been advised that planned maintenance is to be completed during the outage window specified above. Services are expected to be offline for around 15 minutes during this outage window.",
+  "provider_location": "",
+  "provider_service_id": "",
+  "provider_url": "",
+  "visibility": "internal",
+  "outage_status": "published",
+  "timezone": "Australia/Melbourne",
+  "public_timezone": null,
+  "ts": "2022-08-08 16:08:41",
+  "update_time": "2022-08-08 16:08:41",
+  "service_type": "NBN",
+  "outage_updates": [
+    {
+      "update_date": "2022-08-08 16:08:36",
+      "updated_by": "staff_a",
+      "short_update": "",
+      "send_sms": "no",
+      "long_update": "Our network team have been advised that planned maintenance is to be completed during the outage window specified above. Services are expected to be offline for around 15 minutes during this outage window.\r\n",
+      "send_email": "yes",
+      "resolved": "no"
+    }
+  ],
+  "scope": {
+    "poi": [
+      "2BLV",
+      "2GOS",
+      "2CAS",
+      "2CFS"
+    ]
+  }
+}

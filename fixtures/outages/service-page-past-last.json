@@ -1,0 +1,10 @@
+{
+  "pagination": {
+    "total_records": 50,
+    "current_page": 2,
+    "next_page": null,
+    "previous_page": 1,
+    "records_per_page": 50,
+    "total_pages": 1
+  }
+}
