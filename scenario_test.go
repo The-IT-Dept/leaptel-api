@@ -21,7 +21,7 @@ func TestFakeScenarioRoute(t *testing.T) {
 		if err != nil {
 			t.Fatalf("test %d: %v", test, err)
 		}
-		if strings.Contains(string(raw), "_inferred") {
+		if strings.Contains(string(raw), "_inferred") || strings.Contains(string(raw), "_captured") {
 			t.Fatalf("test %d echoes the fixture's note: %.200s", test, raw)
 		}
 		var s string
@@ -41,8 +41,9 @@ func TestFakeScenarioRoute(t *testing.T) {
 		test     int
 		want     string
 	}{
-		{"router_off", 18, "No carrier"},
-		{"router_off", 15, `"Operational State","value":"UP"`}, // its own copy of the NTD being up
+		{"router_off", 18, "No Carrier detected"},                     // captured (8 Nov 2026)
+		{"router_off", 15, `"Operational State","value":"UP"`},        // its own copy of the NTD being up
+		{"router_off", 1, "Service Online - No CPE Detected (UNI-D)"}, // nbn calls it green
 		{"ntd_power", 15, "Dying Gasp"},
 		{"ntd_power", 1, "Dying Gasp"},
 		{"nbn_fault", 1, `"id":"currentOutage","status":null,"timeStamp":"2026-04-17T06:04:12.468828Z","unit":null,"value":"true"`},

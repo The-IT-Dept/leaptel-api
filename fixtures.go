@@ -20,9 +20,11 @@ import (
 // same shape. Scrub anything you add here before committing.
 //
 // fixtures/scenarios/<scenario>/ holds a service's answers in a red, down or
-// refused scenario (set-assurance-scenario). They're inferred from the green
-// captures and nbn's indicator rules until a real capture replaces them; each
-// says so in its "_inferred" key, which the fake never echoes.
+// refused scenario (set-assurance-scenario). router_off's are a real capture
+// (8 Nov 2026), scrubbed the same way; the rest are inferred from the green
+// captures and nbn's indicator rules until a real capture replaces them. Each
+// says which in its "_captured" or "_inferred" key, which the fake never
+// echoes. TestAssuranceFixturesScrubbed holds every one to synthetic ids.
 //
 //go:embed fixtures/*.json fixtures/scenarios/*/*.json
 var fixtureFS embed.FS
