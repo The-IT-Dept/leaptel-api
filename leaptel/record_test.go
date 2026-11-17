@@ -39,7 +39,7 @@ func TestRecorderRecordsAndRedacts(t *testing.T) {
 	}))
 	defer srv.Close()
 	sink := &memSink{}
-	c := NewClient(srv.URL, "user", "s3cret").WithSink(sink).For(12, 34)
+	c := NewClient(srv.URL, "user", "s3cret").WithSink(sink).For("00000000000000000000000012", "00000000000000000000000034")
 	if _, _, err := c.CreateOrder(CreateOrderParams{CustomerID: 1, LocationID: "LOC000000000001", PlanID: 3539, ContactFirstName: "Ada"}); err != nil {
 		t.Fatal(err)
 	}
@@ -47,8 +47,8 @@ func TestRecorderRecordsAndRedacts(t *testing.T) {
 	if got.Method != "POST" || got.Path != "/orders" || !got.Write || got.Status != 200 || got.Duration <= 0 {
 		t.Fatalf("call: %+v", got)
 	}
-	if got.ServiceID != 12 || got.OrderID != 34 {
-		t.Fatalf("scope: service %d order %d, want 12/34", got.ServiceID, got.OrderID)
+	if got.ServiceID != "00000000000000000000000012" || got.OrderID != "00000000000000000000000034" {
+		t.Fatalf("scope: service %q order %q, want 00000000000000000000000012/00000000000000000000000034", got.ServiceID, got.OrderID)
 	}
 	if !strings.Contains(got.RequestBody, "LOC000000000001") || !strings.Contains(got.ResponseBody, `"order_id":77`) {
 		t.Fatalf("bodies not recorded: req %q resp %q", got.RequestBody, got.ResponseBody)

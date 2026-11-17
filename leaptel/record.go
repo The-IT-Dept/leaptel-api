@@ -33,8 +33,12 @@ type Call struct {
 	RequestBody  string
 	ResponseBody string
 	Truncated    bool
-	ServiceID    int64 // 0 when the call isn't for one service
-	OrderID      int64
+	// ServiceID and OrderID are the Underlay service and order the call is
+	// for, as ULID text ("" for none): this package imports nothing of ours,
+	// so it carries our ids as their text (internal/leaptel is published on
+	// its own as leaptel-api).
+	ServiceID string
+	OrderID   string
 }
 
 // CallSink receives every call. It must not block for long or fail the call.
@@ -42,7 +46,7 @@ type CallSink interface {
 	RecordCall(ctx context.Context, c Call)
 }
 
-type scope struct{ serviceID, orderID int64 }
+type scope struct{ serviceID, orderID string }
 
 type scopeKey struct{}
 
@@ -54,8 +58,8 @@ func (c *Client) WithSink(s CallSink) *Client {
 }
 
 // For returns a client whose calls are recorded against an Underlay service
-// and (when non-zero) order.
-func (c *Client) For(serviceID, orderID int64) *Client {
+// and (when not "") order, each its ULID text.
+func (c *Client) For(serviceID, orderID string) *Client {
 	cp := *c
 	cp.scope = scope{serviceID, orderID}
 	return &cp

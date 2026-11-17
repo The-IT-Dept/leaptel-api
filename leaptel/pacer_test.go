@@ -399,7 +399,7 @@ func TestClientPacesOutageAndAssuranceOnly(t *testing.T) {
 	t.Run("copies share the pacer", func(t *testing.T) {
 		p, _ := newTestPacer(t, 10)
 		c := NewClient(srv.URL, "u", "p").WithPacer(p)
-		if _, err := c.WithSink(&memSink{}).For(1, 0).WithTimeout(time.Second).ListOutages(context.Background(), q); err != nil {
+		if _, err := c.WithSink(&memSink{}).For("00000000000000000000000001", "").WithTimeout(time.Second).ListOutages(context.Background(), q); err != nil {
 			t.Fatal(err)
 		}
 		if n := p.inWindow(); n != 1 {
