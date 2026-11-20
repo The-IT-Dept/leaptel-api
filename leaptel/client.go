@@ -2,6 +2,7 @@ package leaptel
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,7 +28,8 @@ type Client struct {
 	username string
 	password string
 	http     *http.Client
-	scope    scope // what the call record tags calls with (see For)
+	scope    scope           // what the call record tags calls with (see For)
+	ctx      context.Context // what methods that take no context run under (WithContext); nil: Background
 }
 
 // NewClient builds a Leaptel API client. baseURL may be empty to use the
@@ -41,7 +43,7 @@ func NewClient(baseURL, username, password string) *Client {
 		baseURL:  baseURL,
 		username: username,
 		password: password,
-		http:     &http.Client{Transport: &recorder{base: http.DefaultTransport, baseURL: baseURL, timeout: defaultTimeout}},
+		http:     &http.Client{Transport: &recorder{base: http.DefaultTransport, baseURL: baseURL, timeout: defaultTimeout, limiter: &limiterSlot{}}},
 	}
 }
 

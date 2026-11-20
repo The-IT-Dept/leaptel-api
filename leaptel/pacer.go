@@ -15,6 +15,10 @@ package leaptel
 // ErrRateLimited and tries again on its next tick.
 //
 // The pacer is per process; one instance is shared by every copy of a client.
+// A client given a shared budget (UseLimiter) no longer waits in it: the
+// budget holds every call, of every process, inside the upstream's limits,
+// and keeps the triggered checks' share by priority. The pacer then only
+// counts the 429s it's told of (RateLimited).
 
 import (
 	"context"

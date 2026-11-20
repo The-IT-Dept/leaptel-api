@@ -83,7 +83,7 @@ func (c *Client) transport() *recorder {
 	if r, ok := hc.Transport.(*recorder); ok {
 		rec = *r
 	} else {
-		rec = recorder{base: hc.Transport, baseURL: c.baseURL, timeout: defaultTimeout}
+		rec = recorder{base: hc.Transport, baseURL: c.baseURL, timeout: defaultTimeout, limiter: &limiterSlot{}}
 		if rec.base == nil {
 			rec.base = http.DefaultTransport
 		}

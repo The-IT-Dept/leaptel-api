@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"sync/atomic"
 	"time"
 	"unicode/utf8"
 )
@@ -65,15 +66,29 @@ func (c *Client) For(serviceID, orderID string) *Client {
 	return &cp
 }
 
-// newRequest builds a request carrying the client's scope for the recorder.
+// newRequest builds a request carrying the client's scope for the recorder,
+// under the client's context (WithContext; context.Background() without one).
 func (c *Client) newRequest(method, url string, body io.Reader) (*http.Request, error) {
-	return c.newRequestCtx(context.Background(), method, url, body)
+	ctx := c.ctx
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return c.newRequestCtx(ctx, method, url, body)
 }
 
 // newRequestCtx is newRequest under the caller's context (its deadline, and
 // the pacer's priority).
 func (c *Client) newRequestCtx(ctx context.Context, method, url string, body io.Reader) (*http.Request, error) {
 	return http.NewRequestWithContext(context.WithValue(ctx, scopeKey{}, c.scope), method, url, body)
+}
+
+// WithContext returns a client whose calls from methods that take no context
+// run under ctx: its deadline, its priority (WithPriority) and NoWait reach
+// the budget and the pacer.
+func (c *Client) WithContext(ctx context.Context) *Client {
+	cp := *c
+	cp.ctx = ctx
+	return &cp
 }
 
 // IsWrite reports whether a Leaptel call changes something there: anything
@@ -139,15 +154,131 @@ func capBody(b []byte) (string, bool) {
 }
 
 // recorder is the client's transport: it records every call (sink),
-// enforces the safety stop on writes (breaker) and paces outage reads and
+// enforces the safety stop on writes (breaker), takes every call's slot from
+// the shared budget (limiter) and, without one, paces outage reads and
 // assurance calls (pacer). Any of them may be nil.
 type recorder struct {
 	base    http.RoundTripper
 	sink    CallSink
 	breaker Breaker
-	pacer   *Pacer // shared by every copy; nil: nothing is paced
+	pacer   *Pacer       // shared by every copy; nil: nothing is paced
+	limiter *limiterSlot // shared by every copy, set or not (UseLimiter)
 	baseURL string
 	timeout time.Duration
+}
+
+// --- the shared budget ---
+
+// Limiter is the budget every call takes a slot from before it's sent: one
+// shared by every process that calls the upstream (the store's DB bucket),
+// so two pods together stay inside the upstream's per-route limits. route is
+// the upstream's rate bucket the call counts against (RouteOf), write whether
+// it changes anything there. release, which must be called once, takes the
+// answer's status (0: none came). Take waits for a slot until ctx ends, or
+// no longer than MaxWait allows: an error means the call wasn't sent.
+type Limiter interface {
+	Take(ctx context.Context, route string, write bool) (release func(status int), err error)
+}
+
+// The upstream's rate buckets, as RouteOf names them.
+const (
+	RouteOutages  = "outages"  // GET /outages, /outages/{id}, /services/{id}/outages: 10 a minute
+	RouteServices = "services" // GET /services/{id}: 15 a minute
+	RouteGeneral  = "general"  // every other read, service qualifications and assurance tests: about 10 a minute
+	RouteWrites   = "writes"   // orders, modifies, cancels, customers, appointments (general's bucket, unless proven otherwise)
+)
+
+var serviceRead = regexp.MustCompile(`^/services/\d+$`)
+
+// RouteOf is the rate bucket a call (path relative to the base URL, query
+// included) counts against upstream.
+func RouteOf(method, path string) string {
+	p := path
+	if i := strings.IndexByte(p, '?'); i >= 0 {
+		p = p[:i]
+	}
+	switch {
+	case p == "/outages" || strings.HasPrefix(p, "/outages/") || serviceOutagesPath.MatchString(p):
+		return RouteOutages
+	case method == http.MethodGet && serviceRead.MatchString(p):
+		return RouteServices
+	case !IsWrite(method, p):
+		return RouteGeneral
+	}
+	return RouteWrites
+}
+
+// ErrBudgetBusy is a call the shared budget had no slot for: before its
+// context's deadline, or within MaxWait (at once under NoWait). It wasn't sent. It's an
+// ErrPacerBusy (and so a context.DeadlineExceeded) too: callers that map a
+// busy pacer map this the same way.
+var ErrBudgetBusy = fmt.Errorf("leaptel: no slot in the shared budget: %w", ErrPacerBusy)
+
+type maxWaitKey struct{}
+
+// MaxWait returns ctx whose calls wait at most d for a budget slot, whatever
+// their own deadline (time in the queue isn't the call's): past it they fail
+// with ErrBudgetBusy, unsent. A negative d lifts an outer bound (wait as long
+// as the context lasts). A service qualification waits 30 s for its turn,
+// then asks the customer to try again.
+func MaxWait(ctx context.Context, d time.Duration) context.Context {
+	return context.WithValue(ctx, maxWaitKey{}, d)
+}
+
+// NoWait is MaxWait(ctx, 0): a slot only if one is free now. Loops that
+// spread their work over ticks use it, so a busy budget ends the tick rather
+// than holding it.
+func NoWait(ctx context.Context) context.Context { return MaxWait(ctx, 0) }
+
+// MaxWaitFrom is ctx's bound on waiting for a slot, and false when it has
+// none (or MaxWait lifted it).
+func MaxWaitFrom(ctx context.Context) (time.Duration, bool) {
+	d, ok := ctx.Value(maxWaitKey{}).(time.Duration)
+	if !ok || d < 0 {
+		return 0, false
+	}
+	return d, true
+}
+
+// PriorityFrom is the priority WithPriority put on ctx, and false when none
+// was: a Limiter reads it to hold capacity back for the calls a person waits
+// on.
+func PriorityFrom(ctx context.Context) (Priority, bool) {
+	p, ok := ctx.Value(priorityKey{}).(Priority)
+	return p, ok
+}
+
+// limiterSlot is the Limiter every copy of a client shares: setting it once
+// reaches copies made before (the outage ingest's) as well as after.
+type limiterSlot struct{ l atomic.Pointer[Limiter] }
+
+func (s *limiterSlot) get() Limiter {
+	if s == nil {
+		return nil
+	}
+	if p := s.l.Load(); p != nil {
+		return *p
+	}
+	return nil
+}
+
+// UseLimiter makes every call of this client, and of every copy of it made
+// before or after, take its slot from l first (nil: none). With a Limiter
+// the pacer no longer holds calls back (the budget does, for every process
+// at once); it still counts its 429s.
+func (c *Client) UseLimiter(l Limiter) {
+	r, ok := c.http.Transport.(*recorder)
+	if !ok {
+		r = c.transport()
+	}
+	if r.limiter == nil {
+		r.limiter = &limiterSlot{}
+	}
+	if l == nil {
+		r.limiter.l.Store(nil)
+		return
+	}
+	r.limiter.l.Store(&l)
 }
 
 func (r *recorder) record(ctx context.Context, c Call) {
@@ -158,8 +289,9 @@ func (r *recorder) record(ctx context.Context, c Call) {
 
 func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	path := strings.TrimPrefix(req.URL.String(), r.baseURL)
+	limiter := r.limiter.get()
 	paced := r.pacer != nil && isPaced(req.Method, path)
-	if paced {
+	if paced && limiter == nil {
 		// Before the timeout starts: time in the queue isn't the call's.
 		if err := r.pacer.Wait(req.Context(), priorityOf(req)); err != nil {
 			if req.Body != nil {
@@ -167,12 +299,6 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 			}
 			return nil, err
 		}
-	}
-	start := time.Now()
-	if r.timeout > 0 {
-		ctx, cancel := context.WithTimeout(req.Context(), r.timeout)
-		defer cancel() // the body is read in full below, so the deadline can end with this call
-		req = req.WithContext(ctx)
 	}
 	var reqBody []byte
 	if req.Body != nil {
@@ -189,11 +315,29 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 		req.GetBody = func() (io.ReadCloser, error) { return io.NopCloser(bytes.NewReader(b)), nil }
 		req.ContentLength = int64(len(b))
 	}
-	call := Call{At: start, Method: req.Method, Path: path, Write: IsWrite(req.Method, path)}
+	call := Call{Method: req.Method, Path: path, Write: IsWrite(req.Method, path)}
 	if call.Write && r.breaker != nil {
 		if tripped, err := r.breaker.Tripped(req.Context()); err != nil || tripped {
 			return nil, ErrHeld // not sent; staff release the stop
 		}
+	}
+	// The budget's slot, before the timeout starts (time waiting for it isn't
+	// the call's). Taken, it's handed back with the answer's status, so a
+	// 429 holds the route back for every process.
+	release := func(int) {}
+	if limiter != nil {
+		rel, err := limiter.Take(req.Context(), RouteOf(req.Method, path), call.Write)
+		if err != nil {
+			return nil, fmt.Errorf("%s %s: %w", req.Method, path, err) // not sent
+		}
+		release = rel
+	}
+	start := time.Now()
+	call.At = start
+	if r.timeout > 0 {
+		ctx, cancel := context.WithTimeout(req.Context(), r.timeout)
+		defer cancel() // the body is read in full below, so the deadline can end with this call
+		req = req.WithContext(ctx)
 	}
 	if sc, ok := req.Context().Value(scopeKey{}).(scope); ok {
 		call.ServiceID, call.OrderID = sc.serviceID, sc.orderID
@@ -204,10 +348,12 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	resp, err := r.base.RoundTrip(req)
 	call.Duration = time.Since(start)
 	if err != nil {
+		release(0)
 		call.Err = err.Error()
 		r.record(req.Context(), call)
 		return nil, r.stopIfBroken(req, call, nil, err)
 	}
+	release(resp.StatusCode)
 	respBody, readErr := io.ReadAll(resp.Body)
 	resp.Body.Close()
 	resp.Body = io.NopCloser(bytes.NewReader(respBody))
@@ -228,8 +374,10 @@ func (r *recorder) RoundTrip(req *http.Request) (*http.Response, error) {
 	if readErr != nil {
 		return nil, r.stopIfBroken(req, call, nil, readErr)
 	}
-	if paced && resp.StatusCode == http.StatusTooManyRequests {
-		return nil, fmt.Errorf("%s %s: %w", req.Method, path, ErrRateLimited) // never a write: no trip
+	if !call.Write && resp.StatusCode == http.StatusTooManyRequests {
+		// A read answered 429 never trips the stop: it's ErrRateLimited, for
+		// the caller to try again later (and the budget holds the route back).
+		return nil, fmt.Errorf("%s %s: %w", req.Method, path, ErrRateLimited)
 	}
 	if err := r.stopIfBroken(req, call, respBody, nil); err != nil {
 		return nil, err
